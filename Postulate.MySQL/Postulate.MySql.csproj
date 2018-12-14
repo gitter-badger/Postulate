@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Postulate.Base\Postulate.Base.csproj" />
   </ItemGroup>
 
