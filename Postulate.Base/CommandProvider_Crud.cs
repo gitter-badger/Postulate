@@ -682,5 +682,53 @@ namespace Postulate.Base
 			columnList = string.Join(", ", columns.Select(c => ApplyDelimiter(c.ColumnName)));
 			valueList = string.Join(", ", columns.Select(c => $"@{c.PropertyName}"));
 		}
+
+		protected string CreateTableCommandInner(Type modelType, string tableName, bool requireIdentity = true)
+		{
+			string constraintName = tableName.Replace(".", "_");
+
+			var columns = _integrator.GetMappedColumns(modelType);
+			var pkColumns = GetPrimaryKeyColumns(modelType, columns, out bool identityIsPrimaryKey);
+
+			string identityName = null;
+			bool hasIdentity = false;
+			if (requireIdentity)
+			{
+				identityName = modelType.GetIdentityName();
+				hasIdentity = true;
+			}
+			else
+			{
+				identityName = modelType.TryGetIdentityName(string.Empty, ref hasIdentity);
+			}
+
+			List<string> members = new List<string>();
+			members.AddRange(columns.Select(pi => SqlColumnSyntax(pi, (identityName.Equals(pi.Name)))));
+			members.Add(PrimaryKeySyntax(constraintName, pkColumns));
+			if (!identityIsPrimaryKey && hasIdentity) members.Add(UniqueIdSyntax(constraintName, modelType.GetIdentityProperty()));
+
+			return
+				$"CREATE TABLE {ApplyDelimiter(tableName)} (" +
+					string.Join(",\r\n\t", members) +
+				")";
+		}
+
+		protected IEnumerable<PropertyInfo> GetPrimaryKeyColumns(Type type, IEnumerable<PropertyInfo> columns, out bool identityIsPrimaryKey)
+		{
+			identityIsPrimaryKey = false;
+			var result = columns.Where(pi => pi.HasAttribute<PrimaryKeyAttribute>());
+
+			if (!result.Any())
+			{
+				identityIsPrimaryKey = true;
+				result = new[] { type.GetIdentityProperty() };
+			}
+
+			return result;
+		}
+
+		protected abstract string PrimaryKeySyntax(string constraintName, IEnumerable<PropertyInfo> pkColumns);
+
+		protected abstract string UniqueIdSyntax(string constraintName, PropertyInfo identityProperty);
 	}
 }

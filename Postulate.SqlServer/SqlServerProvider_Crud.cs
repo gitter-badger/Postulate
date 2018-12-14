@@ -92,5 +92,16 @@ namespace Postulate.SqlServer
 
 			return result;
 		}
+
+		public override string CreateSchemaCommand(string schemaName)
+		{
+			return $"CREATE SCHEMA [{schemaName}]";
+		}
+
+		public override string CreateTableCommand(Type modelType)
+		{
+			string tableName = _integrator.GetTableName(modelType);
+			return CreateTableCommandInner(modelType, tableName);
+		}
 	}
 }
