@@ -8,13 +8,21 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Postulate.Base
 {
 	public abstract partial class CommandProvider<TKey>
 	{
+		public abstract bool SchemaExists(IDbConnection connection, string schemaName);
+
+		/// <summary>
+		/// Generates a SQL create table statement for a given model class
+		/// </summary>
+		public abstract string CreateTableCommand(Type modelType);
+
+		public abstract string CreateSchemaCommand(string schemaName);
+
 		private bool IsTrackingChanges<TModel>(out string[] ignoreProperties)
 		{
 			ignoreProperties = null;
@@ -27,9 +35,10 @@ namespace Postulate.Base
 			return true;
 		}
 
-		const string changesSchema = "changes";
+		private const string changesSchema = "changes";
 
 		protected abstract bool TableExists(IDbConnection connection, TableInfo table);
+
 		protected abstract string CreateTableScript(TableInfo table, Type modelType);
 
 		/// <summary>
