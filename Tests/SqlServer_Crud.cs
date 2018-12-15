@@ -6,7 +6,6 @@ using Postulate.Base.Interfaces;
 using Postulate.SqlServer;
 using Postulate.SqlServer.IntKey;
 using System;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using Tests.Models;
@@ -17,9 +16,9 @@ namespace Tests.SqlServer
 	public partial class TestSqlServer : TestBase
 	{
 		protected override IDbConnection GetConnection()
-		{
-			string connectionString = ConfigurationManager.ConnectionStrings["SqlServer"].ConnectionString;
-			return new SqlConnection(connectionString);
+		{			
+			string connectionStr = XmlConfig.GetConnectionString("SqlServer");
+			return new SqlConnection(connectionStr);
 		}
 
 		protected override CommandProvider<int> GetIntProvider()
@@ -29,7 +28,7 @@ namespace Tests.SqlServer
 
 		private static IDbConnection GetMasterConnection()
 		{
-			string masterConnection = ConfigurationManager.ConnectionStrings["SqlServerMaster"].ConnectionString;
+			string masterConnection = XmlConfig.GetConnectionString("SqlServerMaster");
 			return new SqlConnection(masterConnection);
 		}
 
@@ -237,5 +236,4 @@ namespace Tests.SqlServer
 
 		public DateTime LocalTime { get { return DateTime.Now; } }
 	}
-
 }
