@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.3.0</Version>
+    <Authors>Adam O'Neil</Authors>
+    <Description>Base, abstract classes for Postulate ORM</Description>
+    <Copyright>Copyright (c) Adam O'Neil 2018</Copyright>
+    <PackageLicenseUrl>https://github.com/adamosoftware/Postulate/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/adamosoftware/Postulate</PackageProjectUrl>
+    <PackageTags>codefirst, orm</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
