@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net45;net461</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net451;net461</TargetFrameworks>
     <Version>1.3</Version>
     <Authors>Adam O'Neil</Authors>
     <PackageProjectUrl></PackageProjectUrl>
@@ -22,8 +22,8 @@
     <DefineConstants>NETCORE;</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
-    <DefineConstants>NET45;NETFULL</DefineConstants>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net451'">
+    <DefineConstants>NET451;NETFULL</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net461'">
