@@ -2,7 +2,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/i8uoaftti334xuth/branch/master?svg=true)](https://ci.appveyor.com/project/adamosoftware/postulate/branch/master)
 
-Note: this project targets .NET Standard 2.0, and replaces my [Postulate.Lite](https://github.com/adamosoftware/Postulate) project.
+Note: this project targets .NET Standard 2.0, and replaces my [Postulate.Lite](https://github.com/adamosoftware/Postulate.Lite) project.
 
 Postulate.Lite is a code-first ORM built around [Dapper](https://github.com/StackExchange/Dapper) that performs CRUD operations on your model types. It's an evolution of my [Postulate.Orm](https://github.com/adamosoftware/Postulate.Orm) project that is
 - more POCO-friendly, having no base type dependency
