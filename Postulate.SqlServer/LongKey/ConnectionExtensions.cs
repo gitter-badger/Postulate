@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Postulate.SqlServer.LongKey
+namespace Postulate.Lite.SqlServer.LongKey
 {
 	public static class ConnectionExtensions
 	{
@@ -123,9 +123,9 @@ namespace Postulate.SqlServer.LongKey
 			await GetProvider().DeleteAsync<TModel>(connection, id, user);
 		}
 
-		public static void CreateTable<TModel>(this IDbConnection connection)
+		public static void CreateTable<TModel>(this IDbConnection connection, string tableName = null)
 		{
-			GetProvider().CreateTable<TModel>(connection);
+			GetProvider().CreateTable<TModel>(connection, tableName);
 		}
 	}
 }

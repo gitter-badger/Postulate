@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postulate.Base", "Postulate.Base\Postulate.Base.csproj", "{E42BFAF3-76B1-4FBA-AA79-3282AD3A3BD6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postulate.SqlServer", "Postulate.SqlServer\Postulate.SqlServer.csproj", "{4A888B73-9ED7-4AF6-8E44-87EBE5B01D43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{E42BFAF3-76B1-4FBA-AA79-3282AD3A3BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E42BFAF3-76B1-4FBA-AA79-3282AD3A3BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E42BFAF3-76B1-4FBA-AA79-3282AD3A3BD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A888B73-9ED7-4AF6-8E44-87EBE5B01D43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A888B73-9ED7-4AF6-8E44-87EBE5B01D43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A888B73-9ED7-4AF6-8E44-87EBE5B01D43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A888B73-9ED7-4AF6-8E44-87EBE5B01D43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,9 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
-namespace Postulate.SqlServer
+namespace Postulate.Lite.SqlServer
 {
 	public partial class SqlServerProvider<TKey> : CommandProvider<TKey>
 	{
@@ -91,17 +90,6 @@ namespace Postulate.SqlServer
 			}
 
 			return result;
-		}
-
-		public override string CreateSchemaCommand(string schemaName)
-		{
-			return $"CREATE SCHEMA [{schemaName}]";
-		}
-
-		public override string CreateTableCommand(Type modelType)
-		{
-			string tableName = _integrator.GetTableName(modelType);
-			return CreateTableCommandInner(modelType, tableName);
 		}
 	}
 }
