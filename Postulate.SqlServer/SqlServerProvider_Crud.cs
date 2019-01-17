@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Postulate.Lite.SqlServer
+namespace Postulate.SqlServer
 {
 	public partial class SqlServerProvider<TKey> : CommandProvider<TKey>
 	{

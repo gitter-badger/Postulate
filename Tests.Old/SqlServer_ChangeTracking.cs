@@ -6,7 +6,7 @@ namespace Tests.SqlServer
 	{
 		[TestMethod]
 		public void TrackItemChanges()
-		{
+		{			
 			TrackItemChangesBase();
 		}
 	}

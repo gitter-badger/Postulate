@@ -3,7 +3,7 @@ using Postulate.Base.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace Postulate.Lite.SqlServer
+namespace Postulate.SqlServer
 {
 	public class SqlServerIntegrator : SqlIntegrator
 	{

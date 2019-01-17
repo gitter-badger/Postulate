@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Postulate.Lite.SqlServer.IntKey
+namespace Postulate.SqlServer.IntKey
 {
 	public static class ConnectionExtensions
 	{

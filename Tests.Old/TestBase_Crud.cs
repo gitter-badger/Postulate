@@ -324,67 +324,6 @@ namespace Tests
 			}
 		}
 
-		protected void CreateOrgTableWithCustomNameBase()
-		{
-			using (var cn = GetConnection())
-			{
-				DropTable(cn, CustomTableName);
-				GetIntProvider().CreateTable<Organization>(cn, CustomTableName);
-			}
-		}
-
-		protected void CommonCrudWithCustomTableBase()
-		{
-			const string customEmpTable = "EmpSample";
-			var provider = GetIntProvider();
-
-			using (var cn = GetConnection())
-			{
-				DropTable(cn, customEmpTable);
-				provider.CreateTable<EmployeeInt>(cn, customEmpTable);
-
-				// save
-				var e = new EmployeeInt() { FirstName = "Nobody", LastName = "Name", Email = "Whatever@Nowhere.org" };
-				provider.Save(cn, e, tableName: customEmpTable);
-				int id = e.Id;
-
-				// find
-				e = provider.Find<EmployeeInt>(cn, id);
-				Assert.IsTrue(e.Id == id);
-
-				// should really do FindWhere and Merge
-
-				// delete
-				provider.Delete<EmployeeInt>(cn, e.Id, tableName: customEmpTable);
-				Assert.IsTrue(!provider.Exists<EmployeeInt>(cn, id, tableName: customEmpTable));
-			}
-		}
-
-		protected void CommonAsyncCrudWithCustomTableBase()
-		{
-			const string customEmpTable = "EmpSample";
-			var provider = GetIntProvider();
-
-			using (var cn = GetConnection())
-			{
-				DropTable(cn, customEmpTable);
-				provider.CreateTable<EmployeeInt>(cn, customEmpTable);
-
-				// save
-				var e = new EmployeeInt() { FirstName = "Nobody", LastName = "Name", Email = "Whatever@Nowhere.org" };
-				provider.SaveAsync(cn, e, tableName: customEmpTable).Wait();
-				int id = e.Id;
-
-				// find
-				e = provider.FindAsync<EmployeeInt>(cn, id).Result;
-				Assert.IsTrue(e.Id == id);
-
-				// delete
-				provider.DeleteAsync<EmployeeInt>(cn, e.Id, tableName: customEmpTable).Wait();
-				Assert.IsTrue(!provider.ExistsAsync<EmployeeInt>(cn, id, tableName: customEmpTable).Result);
-			}
-		}
-
 		protected void EmployeeQueryLastNameBase()
 		{
 			InsertEmployeesBase();
@@ -403,7 +342,5 @@ namespace Tests
 		/// </summary>
 		/// <returns></returns>
 		protected abstract string GetEmployeeQueryByLastNameSyntax();
-
-		protected abstract string CustomTableName { get; }
 	}
 }

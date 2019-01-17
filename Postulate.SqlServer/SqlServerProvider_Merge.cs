@@ -3,7 +3,7 @@ using Postulate.Base.Extensions;
 using System;
 using System.Data;
 
-namespace Postulate.Lite.SqlServer
+namespace Postulate.SqlServer
 {
 	public partial class SqlServerProvider<TKey> : CommandProvider<TKey>
 	{

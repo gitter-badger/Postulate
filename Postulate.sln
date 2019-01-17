@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postulate.SqlServer", "Post
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postulate.MySql", "Postulate.MySql\Postulate.MySql.csproj", "{BA87BB2F-502A-4ACF-8689-131FDE206BA9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{C9914729-DFF3-42B7-AFE7-6E9DB518B6CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BA87BB2F-502A-4ACF-8689-131FDE206BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA87BB2F-502A-4ACF-8689-131FDE206BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA87BB2F-502A-4ACF-8689-131FDE206BA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9914729-DFF3-42B7-AFE7-6E9DB518B6CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9914729-DFF3-42B7-AFE7-6E9DB518B6CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9914729-DFF3-42B7-AFE7-6E9DB518B6CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9914729-DFF3-42B7-AFE7-6E9DB518B6CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

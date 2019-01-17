@@ -6,6 +6,7 @@ using Postulate.Base.Interfaces;
 using Postulate.SqlServer;
 using Postulate.SqlServer.IntKey;
 using System;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using Tests.Models;
@@ -16,9 +17,9 @@ namespace Tests.SqlServer
 	public partial class TestSqlServer : TestBase
 	{
 		protected override IDbConnection GetConnection()
-		{			
-			string connectionStr = XmlConfig.GetConnectionString("SqlServer");
-			return new SqlConnection(connectionStr);
+		{
+			string connectionString = ConfigurationManager.ConnectionStrings["SqlServer"].ConnectionString;
+			return new SqlConnection(connectionString);
 		}
 
 		protected override CommandProvider<int> GetIntProvider()
@@ -28,7 +29,7 @@ namespace Tests.SqlServer
 
 		private static IDbConnection GetMasterConnection()
 		{
-			string masterConnection = XmlConfig.GetConnectionString("SqlServerMaster");
+			string masterConnection = ConfigurationManager.ConnectionStrings["SqlServerMaster"].ConnectionString;
 			return new SqlConnection(masterConnection);
 		}
 
@@ -227,6 +228,26 @@ namespace Tests.SqlServer
 
 				Assert.Fail("Save operation should have thrown exception.");
 			}
+		}
+
+		protected override string CustomTableName => "dbo.HelloOrg";
+
+		[TestMethod]
+		public void CreateOrgTableWithCustomName()
+		{
+			CreateOrgTableWithCustomNameBase();
+		}
+
+		[TestMethod]
+		public void CommonCrudWithCustomTable()
+		{
+			CommonCrudWithCustomTableBase();
+		}
+
+		[TestMethod]
+		public void CommonAsyncCrudWithCustomTable()
+		{
+			CommonAsyncCrudWithCustomTableBase();
 		}
 	}
 

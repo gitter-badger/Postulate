@@ -4,7 +4,6 @@ using MySql.Data.MySqlClient;
 using Postulate.Base;
 using Postulate.MySql;
 using System;
-using System.Configuration;
 using System.Data;
 
 namespace Tests.MySql
@@ -14,7 +13,7 @@ namespace Tests.MySql
 	{
 		protected override IDbConnection GetConnection()
 		{
-			string connectionStr = ConfigurationManager.ConnectionStrings["MySql"].ConnectionString;
+			string connectionStr = XmlConfig.GetConnectionString("MySql");
 			return new MySqlConnection(connectionStr);
 		}
 
@@ -25,7 +24,7 @@ namespace Tests.MySql
 
 		private static IDbConnection GetMasterConnection()
 		{
-			string masterConnection = ConfigurationManager.ConnectionStrings["MySqlMaster"].ConnectionString;
+			string masterConnection = XmlConfig.GetConnectionString("MySqlMaster");
 			return new MySqlConnection(masterConnection);
 		}
 
@@ -170,26 +169,6 @@ namespace Tests.MySql
 		public void TrackItemChanges()
 		{
 			TrackItemChangesBase();
-		}
-
-		protected override string CustomTableName => "hello_org";
-
-		[TestMethod]
-		public void CreateOrgTableWithCustomName()
-		{
-			CreateOrgTableWithCustomNameBase();
-		}
-
-		[TestMethod]
-		public void CommonCrudWithCustomTable()
-		{
-			CommonCrudWithCustomTableBase();
-		}
-
-		[TestMethod]
-		public void CommonAsyncCrudWithCustomTable()
-		{
-			CommonAsyncCrudWithCustomTableBase();
 		}
 
 		protected override string GetEmployeeQueryByLastNameSyntax()

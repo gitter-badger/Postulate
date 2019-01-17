@@ -3,7 +3,7 @@ using Postulate.Base.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace Postulate.Lite.MySql
+namespace Postulate.MySql
 {
 	public class MySqlIntegrator : SqlIntegrator
 	{

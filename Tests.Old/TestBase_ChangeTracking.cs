@@ -8,7 +8,7 @@ namespace Tests
 	{
 		protected void TrackItemChangesBase()
 		{
-			InitItemTables();
+			InitItemTables();			
 
 			var item = new Item()
 			{

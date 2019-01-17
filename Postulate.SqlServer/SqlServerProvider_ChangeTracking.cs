@@ -4,7 +4,7 @@ using Postulate.Base.Models;
 using System;
 using System.Data;
 
-namespace Postulate.Lite.SqlServer
+namespace Postulate.SqlServer
 {
 	public partial class SqlServerProvider<TKey> : CommandProvider<TKey>
 	{

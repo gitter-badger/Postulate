@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Postulate.Lite.SqlServer.LongKey
+namespace Postulate.SqlServer.LongKey
 {
 	public static class ConnectionExtensions
 	{

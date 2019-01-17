@@ -8,7 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 
-namespace Postulate.Lite.MySql
+namespace Postulate.MySql
 {
 	public partial class MySqlProvider<TKey> : CommandProvider<TKey>
 	{
