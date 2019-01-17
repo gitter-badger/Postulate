@@ -6,7 +6,9 @@
     <Authors>Adam O'Neil</Authors>
     <RepositoryUrl>https://github.com/adamosoftware/Postulate</RepositoryUrl>
     <PackageTags>codefirst orm dapper</PackageTags>
-    <Description>Abstract and base classes for Postulate ORM</Description>    
+    <Description>Abstract and base classes for Postulate ORM</Description>
+    <PackageLicenseUrl>https://github.com/adamosoftware/Postulate/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Copyright (c) Adam O'Neil 2019</Copyright>    
   </PropertyGroup>
   
   <ItemGroup>      
