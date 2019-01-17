@@ -1,6 +1,6 @@
 # Postulate ORM
 
-[1/16/19] I figured out I need to target .NET Standard to achieve the most compatibility. I just now got this implemented in this repo and Nuget packages uploaded:
+[1/16/19] I figured out I need to target .NET Standard to achieve the most compatibility. I just now got this implemented in this repo and Nuget packages version 1.3.1 uploaded:
 
 - Postulate.SqlServer
 - Postulate.MySql
