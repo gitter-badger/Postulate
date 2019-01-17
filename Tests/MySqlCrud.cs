@@ -4,7 +4,6 @@ using MySql.Data.MySqlClient;
 using Postulate.Base;
 using Postulate.MySql;
 using System;
-using System.Configuration;
 using System.Data;
 
 namespace Tests.MySql
@@ -14,7 +13,7 @@ namespace Tests.MySql
 	{
 		protected override IDbConnection GetConnection()
 		{
-			string connectionStr = ConfigurationManager.ConnectionStrings["MySql"].ConnectionString;
+			string connectionStr = Config.GetValue<string>("ConnectionStrings.MySql");
 			return new MySqlConnection(connectionStr);
 		}
 
@@ -25,7 +24,7 @@ namespace Tests.MySql
 
 		private static IDbConnection GetMasterConnection()
 		{
-			string masterConnection = ConfigurationManager.ConnectionStrings["MySqlMaster"].ConnectionString;
+			string masterConnection = Config.GetValue<string>("Connectionstrings.MySqlMaster");
 			return new MySqlConnection(masterConnection);
 		}
 

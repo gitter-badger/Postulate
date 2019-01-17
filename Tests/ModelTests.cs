@@ -24,7 +24,7 @@ namespace Tests
 		public void OrganizationIdentityLastColumn()
 		{
 			SqlIntegrator integrator = new SqlServerIntegrator();
-			var props = integrator.GetMappedColumns(typeof(Organization));
+			var props = integrator.GetMappedColumns(typeof(Organization)).ToArray();
 			var identity = typeof(Organization).GetIdentityProperty();
 			Assert.IsTrue(props.Last().Equals(identity));
 		}
