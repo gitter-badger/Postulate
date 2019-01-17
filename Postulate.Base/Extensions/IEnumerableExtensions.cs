@@ -33,7 +33,7 @@ namespace Postulate.Lite.Core.Extensions
 		}
 
 		private static DataTable DataTableFromType(Type type, SqlIntegrator integrator, bool excludeIdentity, out PropertyInfo[] properties)
-		{						
+		{
 			DataTable result = new DataTable(integrator.GetTableName(type));
 			properties = integrator.GetMappedColumns(type).ToArray();
 			if (excludeIdentity)
@@ -48,7 +48,7 @@ namespace Postulate.Lite.Core.Extensions
 				DataColumn col = result.Columns.Add(pi.GetColumnName(), pi.GetMappedType());
 				if (pi.HasAttribute<PrimaryKeyAttribute>()) pkColumns.Add(col);
 			}
-		
+
 			result.PrimaryKey = pkColumns.ToArray();
 
 			return result;

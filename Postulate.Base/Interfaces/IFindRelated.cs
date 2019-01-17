@@ -4,7 +4,7 @@ namespace Postulate.Lite.Core.Interfaces
 {
 	/// <summary>
 	/// Implement this on model types that require foreign key lookups whenever a record is accessed
-	/// </summary>	
+	/// </summary>
 	public interface IFindRelated<TKey>
 	{
 		/// <summary>

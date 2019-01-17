@@ -43,7 +43,6 @@ namespace Postulate.Lite.Core
 			if (schemaAttr != null) parts["schema"] = schemaAttr.Name;
 
 			return new TableInfo() { Name = parts["name"], Schema = parts["schema"], ModelType = type };
-
 		}
 
 		public string GetTableName(Type type)
@@ -66,7 +65,7 @@ namespace Postulate.Lite.Core
 				if (innerType.IsEnum) return FindTypeInfo(innerType);
 				if (supportedTypes.ContainsKey(innerType)) return supportedTypes[innerType];
 			}
-					
+
 			return null;
 		}
 

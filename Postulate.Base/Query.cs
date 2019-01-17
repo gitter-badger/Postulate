@@ -12,7 +12,7 @@ namespace Postulate.Lite.Core
 {
 	/// <summary>
 	/// Encapsulates a SQL SELECT query with dynamic criteria that returns TResult
-	/// </summary>	
+	/// </summary>
 	public class Query<TResult>
 	{
 		public Query(string sql)

@@ -11,7 +11,7 @@ namespace Postulate.Lite.Core.Extensions
 		/// </summary>
 		/// <typeparam name="T">Attribute class type</typeparam>
 		public static bool HasAttribute<T>(this ICustomAttributeProvider provider, Func<T, bool> criteria = null) where T : Attribute
-		{			
+		{
 			return HasAttribute<T>(provider, out T result, criteria);
 		}
 
@@ -22,13 +22,13 @@ namespace Postulate.Lite.Core.Extensions
 			if (result != null)
 			{
 				if (criteria?.Invoke(result) ?? true) return true;
-			}			
+			}
 
 			return false;
 		}
 
 		public static T GetAttribute<T>(this ICustomAttributeProvider provider) where T : Attribute
-		{		
+		{
 			var attrs = provider.GetCustomAttributes(typeof(T), true).OfType<T>();
 			return (attrs?.Any() ?? false) ? attrs.FirstOrDefault() : null;
 		}

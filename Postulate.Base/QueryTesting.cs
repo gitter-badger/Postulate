@@ -10,7 +10,7 @@ namespace Postulate.Lite.Core
 	{
 		/// <summary>
 		/// Gets the testable queries in an assembly that's accessible from the current assembly
-		/// </summary>		
+		/// </summary>
 		/// <param name="executing">Normally use Assembly.GetExecutingAssembly()</param>
 		/// <param name="assemblyName">Use the name of the assembly in your solution that has queries you want to test</param>
 		public static IEnumerable<ITestableQuery> GetTestCases(Assembly executing, string assemblyName)

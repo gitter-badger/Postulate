@@ -1,6 +1,5 @@
 ﻿using Postulate.Lite.Core.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Postulate.Lite.Core
@@ -64,7 +63,7 @@ namespace Postulate.Lite.Core
 		/// <summary>
 		/// Override this to lookup related records
 		/// see https://github.com/adamosoftware/Postulate.Lite/wiki/Using-IFindRelated-to-implement-navigation-properties
-		/// </summary>		
+		/// </summary>
 		public virtual void FindReferenced(IDbConnection connection)
 		{
 			// do nothing by default

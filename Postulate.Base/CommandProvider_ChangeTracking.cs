@@ -26,9 +26,10 @@ namespace Postulate.Lite.Core
 			return true;
 		}
 
-		const string changesSchema = "changes";
-		
+		private const string changesSchema = "changes";
+
 		protected abstract bool TableExists(IDbConnection connection, TableInfo table);
+
 		protected abstract string CreateTableScript(TableInfo table, Type modelType);
 
 		/// <summary>
@@ -41,7 +42,7 @@ namespace Postulate.Lite.Core
 		protected abstract string SqlInsertRowVersion(string tableName);
 
 		private async Task<IEnumerable<PropertyChange>> GetChangesAsync<TModel>(IDbConnection connection, TModel @object)
-		{			
+		{
 			if (IsTrackingChanges<TModel>(out string[] ignoreProperties))
 			{
 				var existing = await FindAsync<TModel>(connection, GetIdentity(@object));
@@ -61,7 +62,7 @@ namespace Postulate.Lite.Core
 		}
 
 		private async Task SaveChangesAsync<TModel>(IDbConnection connection, TModel @object, IEnumerable<PropertyChange> changes, IUser user)
-		{			
+		{
 			if (!changes?.Any() ?? true) return;
 
 			var trackedRecord = @object as ITrackedRecord;
@@ -72,14 +73,14 @@ namespace Postulate.Lite.Core
 			int version = await IncrementNextRecordVersionAsync<TModel>(connection, identity);
 
 			if (useHistoryTable)
-			{				
+			{
 				foreach (var change in changes)
 				{
 					PropertyChangeHistory<TKey> history = GetChangeHistoryRecord(identity, user, version, change);
 					await PlainInsertAsync(connection, history, historyTableName);
 				}
 			}
-			
+
 			trackedRecord?.TrackChanges(connection, version, changes, user);
 		}
 
@@ -95,10 +96,10 @@ namespace Postulate.Lite.Core
 			int version = IncrementNextRecordVersion<TModel>(connection, identity);
 
 			if (useHistoryTable)
-			{				
+			{
 				foreach (var change in changes)
 				{
-					PropertyChangeHistory<TKey> history = GetChangeHistoryRecord(identity, user, version, change);					
+					PropertyChangeHistory<TKey> history = GetChangeHistoryRecord(identity, user, version, change);
 					PlainInsert(connection, history, historyTableName);
 				}
 			}
@@ -170,7 +171,7 @@ namespace Postulate.Lite.Core
 					RecordId = identity,
 					NextVersion = 1
 				};
-				PlainInsert(connection, initialVersion, tableName);				
+				PlainInsert(connection, initialVersion, tableName);
 				result = 1;
 			}
 
@@ -182,7 +183,7 @@ namespace Postulate.Lite.Core
 		private void VerifyChangeTrackingObjects<TModel>(IDbConnection connection, bool createHistoryTable, out string historyTableName)
 		{
 			historyTableName = null;
-			var targetTable = _integrator.GetTableInfo(typeof(TModel));			
+			var targetTable = _integrator.GetTableInfo(typeof(TModel));
 
 			if (!SchemaExists(connection, changesSchema)) connection.Execute(CreateSchemaCommand(changesSchema));
 
@@ -223,7 +224,7 @@ namespace Postulate.Lite.Core
 					NewValue = GetPropertyValue(connection, col.PropertyInfo, newRecord)
 				}).Where(pc => pc.IsChanged());
 		}
-		
+
 		private object GetPropertyValue<TModel>(IDbConnection connection, PropertyInfo propertyInfo, TModel record)
 		{
 			object result = propertyInfo.GetValue(record);
@@ -239,7 +240,7 @@ namespace Postulate.Lite.Core
 		}
 
 		private bool DereferenceId(IDbConnection connection, PropertyInfo propertyInfo, out DereferenceIdAttribute attr)
-		{			
+		{
 			var fk = propertyInfo.GetAttribute<ReferencesAttribute>();
 			if (fk != null)
 			{

@@ -1,12 +1,10 @@
 ﻿using Postulate.Lite.Core.Attributes;
 using Postulate.Lite.Core.Extensions;
-using Postulate.Lite.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Postulate.Lite.Core
 {
@@ -33,11 +31,13 @@ namespace Postulate.Lite.Core
 
 		public abstract string CreateSchemaCommand(string schemaName);
 
-		#endregion command methods		
+		#endregion command methods
+
+
 
 		#region schema inspection
-	
-		public abstract bool SchemaExists(IDbConnection connection, string schemaName);		
+
+		public abstract bool SchemaExists(IDbConnection connection, string schemaName);
 
 		protected IEnumerable<PropertyInfo> GetPrimaryKeyColumns(Type type, IEnumerable<PropertyInfo> columns, out bool identityIsPrimaryKey)
 		{
@@ -53,7 +53,9 @@ namespace Postulate.Lite.Core
 			return result;
 		}
 
-		#endregion schema inspection		
+		#endregion schema inspection
+
+
 
 		protected abstract string PrimaryKeySyntax(string constraintName, IEnumerable<PropertyInfo> pkColumns);
 

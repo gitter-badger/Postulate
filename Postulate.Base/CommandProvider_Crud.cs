@@ -41,7 +41,7 @@ namespace Postulate.Lite.Core
 		/// <summary>
 		/// Generates a SQL insert statement for a given model class without retrieving identity value
 		/// </summary>
-		/// <typeparam name="T">Model class type</typeparam>	
+		/// <typeparam name="T">Model class type</typeparam>
 		protected abstract string PlainInsertCommand<T>(string tableName = null);
 
 		/// <summary>
@@ -227,7 +227,7 @@ namespace Postulate.Lite.Core
 			Trace.WriteLine($"PlainInsertAsync: {cmd}");
 
 			try
-			{				
+			{
 				await connection.ExecuteAsync(cmd, @object);
 			}
 			catch (Exception exc)
@@ -250,7 +250,7 @@ namespace Postulate.Lite.Core
 
 			if (user != null)
 			{
-				if (!record?.CheckSavePermission(connection, user) ?? false) throw new PermissionException($"User {user.UserName} does not have save permission on {typeof(TModel).Name}.");				
+				if (!record?.CheckSavePermission(connection, user) ?? false) throw new PermissionException($"User {user.UserName} does not have save permission on {typeof(TModel).Name}.");
 				record?.BeforeSave(connection, SaveAction.Insert, user);
 			}
 			return record;
@@ -339,7 +339,7 @@ namespace Postulate.Lite.Core
 			try
 			{
 				var changes = GetChanges(connection, @object);
-				connection.Execute(cmd, @object);				
+				connection.Execute(cmd, @object);
 				SaveChanges(connection, @object, changes, user);
 			}
 			catch (Exception exc)
@@ -495,7 +495,7 @@ namespace Postulate.Lite.Core
 			string identityCol = typeof(TModel).GetIdentityName();
 			string cmd = FindCommand<TModel>($"{ApplyDelimiter(identityCol)}=@id");
 			Trace.WriteLine($"Find: {cmd}");
-			TModel result = connection.QuerySingleOrDefault<TModel>(cmd, new { id = identity });			
+			TModel result = connection.QuerySingleOrDefault<TModel>(cmd, new { id = identity });
 			return FindInner(connection, result, user);
 		}
 
@@ -511,7 +511,7 @@ namespace Postulate.Lite.Core
 			string identityCol = typeof(TModel).GetIdentityName();
 			string cmd = FindCommand<TModel>($"{ApplyDelimiter(identityCol)}=@id");
 			Trace.WriteLine($"FindAsync: {cmd}");
-			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, new { id = identity });			
+			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, new { id = identity });
 			return FindInner(connection, result, user);
 		}
 
@@ -540,7 +540,7 @@ namespace Postulate.Lite.Core
 			string whereClause = WhereClauseFromObject(criteria);
 			string cmd = FindCommand<TModel>(whereClause);
 			Trace.WriteLine($"FindWhereAsync: {cmd}");
-			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, criteria);			
+			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, criteria);
 			return FindInner(connection, result, user);
 		}
 
@@ -560,14 +560,14 @@ namespace Postulate.Lite.Core
 		{
 			string cmd = FindCommand<TModel>(whereClause);
 			Trace.WriteLine($"FindWhereInternal: {cmd}");
-			TModel result = connection.QuerySingleOrDefault<TModel>(cmd, criteria);			
+			TModel result = connection.QuerySingleOrDefault<TModel>(cmd, criteria);
 			return FindInner(connection, result, user);
 		}
 
 		private async Task<TModel> FindWhereInternalAsync<TModel>(IDbConnection connection, string whereClause, TModel criteria, IUser user = null)
 		{
 			string cmd = FindCommand<TModel>(whereClause);
-			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, criteria);			
+			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, criteria);
 			return FindInner(connection, result, user);
 		}
 
