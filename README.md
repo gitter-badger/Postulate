@@ -12,7 +12,7 @@ Postulate is a code-first ORM built around [Dapper](https://github.com/StackExch
 
 Postulate is not a Linq replacement. In my applications, I use inline SQL with Postulate's [Query&lt;T&gt;](https://github.com/adamosoftware/Postulate/blob/master/Postulate.Base/Query.cs) type. Please see the [wiki](https://github.com/adamosoftware/Postulate/wiki/Using-the-Query-class) page on this.
 
-Check out my [Medium.com post](https://medium.com/@adamosoftware/postulate-lite-orm-2cf9205d0cb3), which has more background.
+Check out my [Medium.com post](https://medium.com/@adamosoftware/postulate-lite-orm-2cf9205d0cb3), which has more background, although the GitHub links in that article point to the "Lite" repository. There've been no relevant code changes from that version, though, so those links are still useful for learning purposes.
 
 ## Nuget
 
