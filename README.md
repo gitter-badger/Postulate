@@ -4,7 +4,7 @@
 
 Note: this project targets .NET Standard 2.0, and replaces my [Postulate.Lite](https://github.com/adamosoftware/Postulate.Lite) project.
 
-Postulate.Lite is a code-first ORM built around [Dapper](https://github.com/StackExchange/Dapper) that performs CRUD operations on your model types. It's an evolution of my [Postulate.Orm](https://github.com/adamosoftware/Postulate.Orm) project that is
+Postulate is a code-first ORM built around [Dapper](https://github.com/StackExchange/Dapper) that performs CRUD operations on your model types. It's an evolution of my [Postulate.Orm](https://github.com/adamosoftware/Postulate.Orm) project that is
 - more POCO-friendly, having no base type dependency
 - easier to use thanks to extension methods (inspired by [Dapper.SimpleCRUD](https://github.com/ericdc1/Dapper.SimpleCRUD))
 - has a more robust, general-purpose schema merge capability, using my [SchemaSync project](https://github.com/adamosoftware/SchemaSync)
