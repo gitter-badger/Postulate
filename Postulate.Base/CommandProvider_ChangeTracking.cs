@@ -26,10 +26,9 @@ namespace Postulate.Base
 			return true;
 		}
 
-		private const string changesSchema = "changes";
+		const string changesSchema = "changes";
 
 		protected abstract bool TableExists(IDbConnection connection, TableInfo table);
-
 		protected abstract string CreateTableScript(TableInfo table, Type modelType);
 
 		/// <summary>
@@ -77,7 +76,7 @@ namespace Postulate.Base
 				foreach (var change in changes)
 				{
 					PropertyChangeHistory<TKey> history = GetChangeHistoryRecord(identity, user, version, change);
-					await PlainInsertAsync(connection, history, historyTableName);
+					await PlainInsertAsync(connection, history, tableName: historyTableName);
 				}
 			}
 
@@ -100,7 +99,7 @@ namespace Postulate.Base
 				foreach (var change in changes)
 				{
 					PropertyChangeHistory<TKey> history = GetChangeHistoryRecord(identity, user, version, change);
-					PlainInsert(connection, history, historyTableName);
+					PlainInsert(connection, history, tableName: historyTableName);
 				}
 			}
 
@@ -145,7 +144,7 @@ namespace Postulate.Base
 					RecordId = identity,
 					NextVersion = 1
 				};
-				await PlainInsertAsync(connection, initialVersion, tableName);
+				await PlainInsertAsync(connection, initialVersion, tableName: tableName);
 				result = 1;
 			}
 
@@ -171,7 +170,7 @@ namespace Postulate.Base
 					RecordId = identity,
 					NextVersion = 1
 				};
-				PlainInsert(connection, initialVersion, tableName);
+				PlainInsert(connection, initialVersion, tableName: tableName);
 				result = 1;
 			}
 
