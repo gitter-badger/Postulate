@@ -39,7 +39,7 @@ namespace Tests.SqlServer
 			{
 				using (var cn = GetMasterConnection())
 				{
-					cn.Execute("CREATE DATABASE [PostulateLite]");
+					cn.Execute("CREATE DATABASE [Postulate]");
 				}
 			}
 			catch (Exception exc)

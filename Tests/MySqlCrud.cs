@@ -24,18 +24,18 @@ namespace Tests.MySql
 
 		private static IDbConnection GetMasterConnection()
 		{
-			string masterConnection = Config.GetValue<string>("Connectionstrings.MySqlMaster");
+			string masterConnection = Config.GetValue<string>("ConnectionStrings.MySqlMaster");
 			return new MySqlConnection(masterConnection);
 		}
 
-		[TestInitialize]
+		[TestInitialize]		
 		public void InitDb()
 		{
 			try
 			{
 				using (var cn = GetMasterConnection())
 				{
-					cn.Execute("CREATE SCHEMA `PostulateLite`");
+					cn.Execute("CREATE SCHEMA `Postulate`");
 				}
 			}
 			catch (Exception exc)

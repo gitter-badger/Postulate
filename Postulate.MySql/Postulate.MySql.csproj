@@ -9,6 +9,7 @@
     <Copyright>Copyright (c) Adam O'Neil 2019</Copyright>
     <PackageLicenseUrl>https://github.com/adamosoftware/Postulate/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>codefirst orm dapper mysql</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

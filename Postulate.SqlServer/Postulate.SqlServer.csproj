@@ -6,7 +6,7 @@
     <Authors>Adam O'Neil</Authors>
     <RepositoryUrl>https://github.com/adamosoftware/Postulate</RepositoryUrl>
     <PackageTags>codefirst orm dapper sqlserver</PackageTags>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>Copyright (c) Adam O'Neil 2019</Copyright>
     <Description>Postulate ORM implementation for SQL Server</Description>
     <PackageLicenseUrl>https://github.com/adamosoftware/Postulate/blob/master/LICENSE</PackageLicenseUrl>

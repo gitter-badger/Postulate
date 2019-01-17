@@ -8,7 +8,8 @@
     <PackageTags>codefirst orm dapper</PackageTags>
     <Description>Abstract and base classes for Postulate ORM</Description>
     <PackageLicenseUrl>https://github.com/adamosoftware/Postulate/blob/master/LICENSE</PackageLicenseUrl>
-    <Copyright>Copyright (c) Adam O'Neil 2019</Copyright>    
+    <Copyright>Copyright (c) Adam O'Neil 2019</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>    
   </PropertyGroup>
   
   <ItemGroup>      
