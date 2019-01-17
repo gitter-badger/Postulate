@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using Postulate.Lite.Core.Attributes;
-using Postulate.Lite.Core.Extensions;
+using Postulate.Base.Attributes;
+using Postulate.Base.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Postulate.Lite.Core
+namespace Postulate.Base
 {
 	/// <summary>
 	/// Encapsulates a SQL SELECT query with dynamic criteria that returns TResult

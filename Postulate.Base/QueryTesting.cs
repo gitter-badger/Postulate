@@ -1,10 +1,10 @@
-﻿using Postulate.Lite.Core.Interfaces;
+﻿using Postulate.Base.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Postulate.Lite.Core
+namespace Postulate.Base
 {
 	public static class QueryTesting
 	{

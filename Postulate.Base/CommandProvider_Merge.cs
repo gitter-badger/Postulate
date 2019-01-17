@@ -1,12 +1,12 @@
-﻿using Postulate.Lite.Core.Attributes;
-using Postulate.Lite.Core.Extensions;
+﻿using Postulate.Base.Attributes;
+using Postulate.Base.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
 
-namespace Postulate.Lite.Core
+namespace Postulate.Base
 {
 	public abstract partial class CommandProvider<TKey>
 	{

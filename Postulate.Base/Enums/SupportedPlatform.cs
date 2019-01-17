@@ -1,4 +1,4 @@
-﻿namespace Postulate.Lite.Core.Enums
+﻿namespace Postulate.Base.Enums
 {
 	public enum SupportedPlatform
 	{

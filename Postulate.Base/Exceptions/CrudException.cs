@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Lite.Core.Exceptions
+namespace Postulate.Base.Exceptions
 {
 	/// <summary>
 	/// Can be thrown by any of the Crud methods

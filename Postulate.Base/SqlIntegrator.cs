@@ -1,14 +1,14 @@
-﻿using Postulate.Lite.Core.Attributes;
-using Postulate.Lite.Core.Enums;
-using Postulate.Lite.Core.Extensions;
-using Postulate.Lite.Core.Models;
+﻿using Postulate.Base.Attributes;
+using Postulate.Base.Enums;
+using Postulate.Base.Extensions;
+using Postulate.Base.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 
-namespace Postulate.Lite.Core
+namespace Postulate.Base
 {
 	/// <summary>
 	/// Low-level class and property to table and column mapping services

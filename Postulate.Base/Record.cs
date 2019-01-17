@@ -1,8 +1,8 @@
-﻿using Postulate.Lite.Core.Interfaces;
+﻿using Postulate.Base.Interfaces;
 using System;
 using System.Data;
 
-namespace Postulate.Lite.Core
+namespace Postulate.Base
 {
 	[Flags]
 	public enum SaveAction

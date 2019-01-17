@@ -1,8 +1,8 @@
-﻿using Postulate.Lite.Core.Models;
+﻿using Postulate.Base.Models;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Postulate.Lite.Core.Interfaces
+namespace Postulate.Base.Interfaces
 {
 	public interface ITrackedRecord
 	{

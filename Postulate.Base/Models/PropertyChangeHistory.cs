@@ -1,8 +1,8 @@
-﻿using Postulate.Lite.Core.Attributes;
+﻿using Postulate.Base.Attributes;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Postulate.Lite.Core.Models
+namespace Postulate.Base.Models
 {
 	public class PropertyChangeHistory<TKey>
 	{

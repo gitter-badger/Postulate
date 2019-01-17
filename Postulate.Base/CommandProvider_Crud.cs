@@ -1,8 +1,8 @@
 ﻿using Dapper;
-using Postulate.Lite.Core.Attributes;
-using Postulate.Lite.Core.Exceptions;
-using Postulate.Lite.Core.Extensions;
-using Postulate.Lite.Core.Interfaces;
+using Postulate.Base.Attributes;
+using Postulate.Base.Exceptions;
+using Postulate.Base.Extensions;
+using Postulate.Base.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Postulate.Lite.Core
+namespace Postulate.Base
 {
 	/// <summary>
 	/// Generates SQL commands for Crud and Merge methods. As an abstract class, it requires database-specific implementations

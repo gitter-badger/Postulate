@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Postulate.Lite.Core.Extensions
+namespace Postulate.Base.Extensions
 {
 	internal static class InternalStringExtensions
 	{

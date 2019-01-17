@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace Postulate.Lite.Core.Extensions
+namespace Postulate.Base.Extensions
 {
 	public static class PropertyInfoExtensions
 	{

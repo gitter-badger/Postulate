@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Lite.Core.Attributes
+namespace Postulate.Base.Attributes
 {
 	/// <summary>
 	/// Defines the query to execute to lookup the name that maps to a foreign key value during <see cref="CommandProvider{TKey}.GetChanges{TModel}(System.Data.IDbConnection, TModel)"/>

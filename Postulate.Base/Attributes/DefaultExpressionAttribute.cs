@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Lite.Core.Attributes
+namespace Postulate.Base.Attributes
 {
 	/// <summary>
 	/// Use this when adding required columns to a table that already has data.

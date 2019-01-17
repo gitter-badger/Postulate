@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Lite.Core.Attributes
+namespace Postulate.Base.Attributes
 {
 	/// <summary>
 	/// Used with classes based on <see cref="Abstract.Query{TResult}"/> to allow you to map specific criteria expressions with specific property values.

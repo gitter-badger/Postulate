@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Lite.Core.Exceptions
+namespace Postulate.Base.Exceptions
 {
 	public class PermissionException : Exception
 	{

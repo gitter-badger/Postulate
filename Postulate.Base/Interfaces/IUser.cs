@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Lite.Core.Interfaces
+namespace Postulate.Base.Interfaces
 {
 	public interface IUser
 	{

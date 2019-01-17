@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Lite.Core.Attributes
+namespace Postulate.Base.Attributes
 {
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 	public class PrimaryKeyAttribute : Attribute

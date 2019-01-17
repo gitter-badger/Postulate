@@ -1,8 +1,8 @@
 ﻿using Dapper;
-using Postulate.Lite.Core.Attributes;
-using Postulate.Lite.Core.Extensions;
-using Postulate.Lite.Core.Interfaces;
-using Postulate.Lite.Core.Models;
+using Postulate.Base.Attributes;
+using Postulate.Base.Extensions;
+using Postulate.Base.Interfaces;
+using Postulate.Base.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Postulate.Lite.Core
+namespace Postulate.Base
 {
 	public abstract partial class CommandProvider<TKey>
 	{

@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Postulate.Lite.Core.Interfaces
+namespace Postulate.Base.Interfaces
 {
 	/// <summary>
 	/// Implement this on model types that require foreign key lookups whenever a record is accessed

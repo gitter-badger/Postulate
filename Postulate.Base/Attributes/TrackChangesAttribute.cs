@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Lite.Core.Attributes
+namespace Postulate.Base.Attributes
 {
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 	public class TrackChangesAttribute : Attribute

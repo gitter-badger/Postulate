@@ -1,11 +1,11 @@
-﻿using Postulate.Lite.Core.Attributes;
-using Postulate.Lite.Core.Extensions;
+﻿using Postulate.Base.Attributes;
+using Postulate.Base.Extensions;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 
-namespace Postulate.Lite.Core.Models
+namespace Postulate.Base.Models
 {
 	public class ColumnInfo
 	{
