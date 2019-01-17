@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using System.Data;
 
-namespace Postulate.Base.Extensions
+namespace Postulate.Lite.Core.Extensions
 {
 	public static class ConnectionExtensions
 	{

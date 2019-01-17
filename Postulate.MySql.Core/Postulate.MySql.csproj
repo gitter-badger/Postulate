@@ -30,9 +30,5 @@
     <PackageReference Include="MySql.Data" Version="6.9.12" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Postulate.Base\Postulate.Base.csproj" />
-  </ItemGroup>
-
 
 </Project>

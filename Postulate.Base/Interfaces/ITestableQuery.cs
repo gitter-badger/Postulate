@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 
-namespace Postulate.Base.Interfaces
+namespace Postulate.Lite.Core.Interfaces
 {
 	/// <summary>
 	/// Implement this on your Query types to make it easy to unit test your queries.

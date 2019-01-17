@@ -1,8 +1,9 @@
-﻿using Postulate.Base.Interfaces;
+﻿using Postulate.Lite.Core.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Data;
 
-namespace Postulate.Base
+namespace Postulate.Lite.Core
 {
 	[Flags]
 	public enum SaveAction
@@ -63,7 +64,7 @@ namespace Postulate.Base
 		/// <summary>
 		/// Override this to lookup related records
 		/// see https://github.com/adamosoftware/Postulate.Lite/wiki/Using-IFindRelated-to-implement-navigation-properties
-		/// </summary>
+		/// </summary>		
 		public virtual void FindReferenced(IDbConnection connection)
 		{
 			// do nothing by default

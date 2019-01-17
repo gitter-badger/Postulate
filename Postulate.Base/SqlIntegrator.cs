@@ -1,14 +1,14 @@
-﻿using Postulate.Base.Attributes;
-using Postulate.Base.Enums;
-using Postulate.Base.Extensions;
-using Postulate.Base.Models;
+﻿using Postulate.Lite.Core.Attributes;
+using Postulate.Lite.Core.Enums;
+using Postulate.Lite.Core.Extensions;
+using Postulate.Lite.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 
-namespace Postulate.Base
+namespace Postulate.Lite.Core
 {
 	/// <summary>
 	/// Low-level class and property to table and column mapping services
@@ -43,6 +43,7 @@ namespace Postulate.Base
 			if (schemaAttr != null) parts["schema"] = schemaAttr.Name;
 
 			return new TableInfo() { Name = parts["name"], Schema = parts["schema"], ModelType = type };
+
 		}
 
 		public string GetTableName(Type type)
@@ -65,7 +66,7 @@ namespace Postulate.Base
 				if (innerType.IsEnum) return FindTypeInfo(innerType);
 				if (supportedTypes.ContainsKey(innerType)) return supportedTypes[innerType];
 			}
-
+					
 			return null;
 		}
 

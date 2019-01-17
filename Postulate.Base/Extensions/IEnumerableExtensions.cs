@@ -1,11 +1,11 @@
-﻿using Postulate.Base.Attributes;
+﻿using Postulate.Lite.Core.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
 
-namespace Postulate.Base.Extensions
+namespace Postulate.Lite.Core.Extensions
 {
 	/* thanks to
 		http://www.chinhdo.com/20090402/convert-list-to-datatable/

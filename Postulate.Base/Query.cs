@@ -1,15 +1,14 @@
 ﻿using Dapper;
-using Postulate.Base.Attributes;
-using Postulate.Base.Extensions;
+using Postulate.Lite.Core.Attributes;
+using Postulate.Lite.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Postulate.Base
+namespace Postulate.Lite.Core
 {
 	/// <summary>
 	/// Encapsulates a SQL SELECT query with dynamic criteria that returns TResult

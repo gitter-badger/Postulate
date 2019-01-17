@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Base.Exceptions
+namespace Postulate.Lite.Core.Exceptions
 {
 	/// <summary>
 	/// Can be thrown by <see cref="Record.Validate(System.Data.IDbConnection)"/>

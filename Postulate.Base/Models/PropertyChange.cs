@@ -1,4 +1,4 @@
-﻿namespace Postulate.Base.Models
+﻿namespace Postulate.Lite.Core.Models
 {
 	public class PropertyChange
 	{

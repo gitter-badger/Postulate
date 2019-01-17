@@ -1,6 +1,6 @@
-﻿using Postulate.Base.Attributes;
+﻿using Postulate.Lite.Core.Attributes;
 
-namespace Postulate.Base.Models
+namespace Postulate.Lite.Core.Models
 {
 	/// <summary>
 	/// Used with change tracking to get the next version number of a record when saving change history

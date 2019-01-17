@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Base
+namespace Postulate.Lite.Core
 {
 	public enum Databases
 	{
@@ -11,7 +11,7 @@ namespace Postulate.Base
 	namespace Attributes
 	{
 		/// <summary>
-		/// Specifies the type of Postulate.Base.CommandProvider will be used with model merges.
+		/// Specifies the type of Postulate.Lite.Core.CommandProvider will be used with model merges.
 		/// Required by Postulate Merge UI
 		/// </summary>
 		[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]

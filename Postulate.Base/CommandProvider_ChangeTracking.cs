@@ -1,8 +1,8 @@
 ﻿using Dapper;
-using Postulate.Base.Attributes;
-using Postulate.Base.Extensions;
-using Postulate.Base.Interfaces;
-using Postulate.Base.Models;
+using Postulate.Lite.Core.Attributes;
+using Postulate.Lite.Core.Extensions;
+using Postulate.Lite.Core.Interfaces;
+using Postulate.Lite.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,19 +10,10 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Postulate.Base
+namespace Postulate.Lite.Core
 {
 	public abstract partial class CommandProvider<TKey>
 	{
-		public abstract bool SchemaExists(IDbConnection connection, string schemaName);
-
-		/// <summary>
-		/// Generates a SQL create table statement for a given model class
-		/// </summary>
-		public abstract string CreateTableCommand(Type modelType);
-
-		public abstract string CreateSchemaCommand(string schemaName);
-
 		private bool IsTrackingChanges<TModel>(out string[] ignoreProperties)
 		{
 			ignoreProperties = null;
@@ -35,10 +26,9 @@ namespace Postulate.Base
 			return true;
 		}
 
-		private const string changesSchema = "changes";
-
+		const string changesSchema = "changes";
+		
 		protected abstract bool TableExists(IDbConnection connection, TableInfo table);
-
 		protected abstract string CreateTableScript(TableInfo table, Type modelType);
 
 		/// <summary>
@@ -51,7 +41,7 @@ namespace Postulate.Base
 		protected abstract string SqlInsertRowVersion(string tableName);
 
 		private async Task<IEnumerable<PropertyChange>> GetChangesAsync<TModel>(IDbConnection connection, TModel @object)
-		{
+		{			
 			if (IsTrackingChanges<TModel>(out string[] ignoreProperties))
 			{
 				var existing = await FindAsync<TModel>(connection, GetIdentity(@object));
@@ -71,7 +61,7 @@ namespace Postulate.Base
 		}
 
 		private async Task SaveChangesAsync<TModel>(IDbConnection connection, TModel @object, IEnumerable<PropertyChange> changes, IUser user)
-		{
+		{			
 			if (!changes?.Any() ?? true) return;
 
 			var trackedRecord = @object as ITrackedRecord;
@@ -82,14 +72,14 @@ namespace Postulate.Base
 			int version = await IncrementNextRecordVersionAsync<TModel>(connection, identity);
 
 			if (useHistoryTable)
-			{
+			{				
 				foreach (var change in changes)
 				{
 					PropertyChangeHistory<TKey> history = GetChangeHistoryRecord(identity, user, version, change);
 					await PlainInsertAsync(connection, history, historyTableName);
 				}
 			}
-
+			
 			trackedRecord?.TrackChanges(connection, version, changes, user);
 		}
 
@@ -105,10 +95,10 @@ namespace Postulate.Base
 			int version = IncrementNextRecordVersion<TModel>(connection, identity);
 
 			if (useHistoryTable)
-			{
+			{				
 				foreach (var change in changes)
 				{
-					PropertyChangeHistory<TKey> history = GetChangeHistoryRecord(identity, user, version, change);
+					PropertyChangeHistory<TKey> history = GetChangeHistoryRecord(identity, user, version, change);					
 					PlainInsert(connection, history, historyTableName);
 				}
 			}
@@ -180,7 +170,7 @@ namespace Postulate.Base
 					RecordId = identity,
 					NextVersion = 1
 				};
-				PlainInsert(connection, initialVersion, tableName);
+				PlainInsert(connection, initialVersion, tableName);				
 				result = 1;
 			}
 
@@ -192,7 +182,7 @@ namespace Postulate.Base
 		private void VerifyChangeTrackingObjects<TModel>(IDbConnection connection, bool createHistoryTable, out string historyTableName)
 		{
 			historyTableName = null;
-			var targetTable = _integrator.GetTableInfo(typeof(TModel));
+			var targetTable = _integrator.GetTableInfo(typeof(TModel));			
 
 			if (!SchemaExists(connection, changesSchema)) connection.Execute(CreateSchemaCommand(changesSchema));
 
@@ -233,7 +223,7 @@ namespace Postulate.Base
 					NewValue = GetPropertyValue(connection, col.PropertyInfo, newRecord)
 				}).Where(pc => pc.IsChanged());
 		}
-
+		
 		private object GetPropertyValue<TModel>(IDbConnection connection, PropertyInfo propertyInfo, TModel record)
 		{
 			object result = propertyInfo.GetValue(record);
@@ -249,7 +239,7 @@ namespace Postulate.Base
 		}
 
 		private bool DereferenceId(IDbConnection connection, PropertyInfo propertyInfo, out DereferenceIdAttribute attr)
-		{
+		{			
 			var fk = propertyInfo.GetAttribute<ReferencesAttribute>();
 			if (fk != null)
 			{

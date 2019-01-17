@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Base.Attributes
+namespace Postulate.Lite.Core.Attributes
 {
 	public enum IdentityPosition
 	{

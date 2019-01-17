@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Base.Attributes
+namespace Postulate.Lite.Core.Attributes
 {
 	/// <summary>
 	/// Defines a WHERE clause expression that is appended to a query

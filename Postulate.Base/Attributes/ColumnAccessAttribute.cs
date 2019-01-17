@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Base.Attributes
+namespace Postulate.Lite.Core.Attributes
 {
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 	public class ColumnAccessAttribute : Attribute

@@ -1,11 +1,10 @@
 ﻿using Dapper;
-using Postulate.Base.Attributes;
-using Postulate.Base.Exceptions;
-using Postulate.Base.Extensions;
-using Postulate.Base.Interfaces;
+using Postulate.Lite.Core.Attributes;
+using Postulate.Lite.Core.Exceptions;
+using Postulate.Lite.Core.Extensions;
+using Postulate.Lite.Core.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -13,7 +12,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Postulate.Base
+namespace Postulate.Lite.Core
 {
 	/// <summary>
 	/// Generates SQL commands for Crud and Merge methods. As an abstract class, it requires database-specific implementations
@@ -228,7 +227,7 @@ namespace Postulate.Base
 			Trace.WriteLine($"PlainInsertAsync: {cmd}");
 
 			try
-			{
+			{				
 				await connection.ExecuteAsync(cmd, @object);
 			}
 			catch (Exception exc)
@@ -247,11 +246,11 @@ namespace Postulate.Base
 			var record = @object as Record;
 
 			string message = null;
-			if (!record?.Validate(connection, out message) ?? false) throw new Exceptions.ValidationException(message);
+			if (!record?.Validate(connection, out message) ?? false) throw new ValidationException(message);
 
 			if (user != null)
 			{
-				if (!record?.CheckSavePermission(connection, user) ?? false) throw new PermissionException($"User {user.UserName} does not have save permission on {typeof(TModel).Name}.");
+				if (!record?.CheckSavePermission(connection, user) ?? false) throw new PermissionException($"User {user.UserName} does not have save permission on {typeof(TModel).Name}.");				
 				record?.BeforeSave(connection, SaveAction.Insert, user);
 			}
 			return record;
@@ -340,7 +339,7 @@ namespace Postulate.Base
 			try
 			{
 				var changes = GetChanges(connection, @object);
-				connection.Execute(cmd, @object);
+				connection.Execute(cmd, @object);				
 				SaveChanges(connection, @object, changes, user);
 			}
 			catch (Exception exc)
@@ -496,7 +495,7 @@ namespace Postulate.Base
 			string identityCol = typeof(TModel).GetIdentityName();
 			string cmd = FindCommand<TModel>($"{ApplyDelimiter(identityCol)}=@id");
 			Trace.WriteLine($"Find: {cmd}");
-			TModel result = connection.QuerySingleOrDefault<TModel>(cmd, new { id = identity });
+			TModel result = connection.QuerySingleOrDefault<TModel>(cmd, new { id = identity });			
 			return FindInner(connection, result, user);
 		}
 
@@ -512,7 +511,7 @@ namespace Postulate.Base
 			string identityCol = typeof(TModel).GetIdentityName();
 			string cmd = FindCommand<TModel>($"{ApplyDelimiter(identityCol)}=@id");
 			Trace.WriteLine($"FindAsync: {cmd}");
-			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, new { id = identity });
+			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, new { id = identity });			
 			return FindInner(connection, result, user);
 		}
 
@@ -541,7 +540,7 @@ namespace Postulate.Base
 			string whereClause = WhereClauseFromObject(criteria);
 			string cmd = FindCommand<TModel>(whereClause);
 			Trace.WriteLine($"FindWhereAsync: {cmd}");
-			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, criteria);
+			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, criteria);			
 			return FindInner(connection, result, user);
 		}
 
@@ -561,14 +560,14 @@ namespace Postulate.Base
 		{
 			string cmd = FindCommand<TModel>(whereClause);
 			Trace.WriteLine($"FindWhereInternal: {cmd}");
-			TModel result = connection.QuerySingleOrDefault<TModel>(cmd, criteria);
+			TModel result = connection.QuerySingleOrDefault<TModel>(cmd, criteria);			
 			return FindInner(connection, result, user);
 		}
 
 		private async Task<TModel> FindWhereInternalAsync<TModel>(IDbConnection connection, string whereClause, TModel criteria, IUser user = null)
 		{
 			string cmd = FindCommand<TModel>(whereClause);
-			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, criteria);
+			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, criteria);			
 			return FindInner(connection, result, user);
 		}
 
@@ -669,9 +668,9 @@ namespace Postulate.Base
 		/// </summary>
 		/// <typeparam name="TModel">Model class type</typeparam>
 		/// <param name="connection">Open connection</param>
-		public void CreateTable<TModel>(IDbConnection connection)
+		public void CreateTable<TModel>(IDbConnection connection, string tableName = null)
 		{
-			string cmd = CreateTableCommand(typeof(TModel));
+			string cmd = CreateTableCommand(typeof(TModel), tableName);
 			Trace.WriteLine($"CreateTable: {cmd}");
 			connection.Execute(cmd);
 		}
@@ -682,53 +681,5 @@ namespace Postulate.Base
 			columnList = string.Join(", ", columns.Select(c => ApplyDelimiter(c.ColumnName)));
 			valueList = string.Join(", ", columns.Select(c => $"@{c.PropertyName}"));
 		}
-
-		protected string CreateTableCommandInner(Type modelType, string tableName, bool requireIdentity = true)
-		{
-			string constraintName = tableName.Replace(".", "_");
-
-			var columns = _integrator.GetMappedColumns(modelType);
-			var pkColumns = GetPrimaryKeyColumns(modelType, columns, out bool identityIsPrimaryKey);
-
-			string identityName = null;
-			bool hasIdentity = false;
-			if (requireIdentity)
-			{
-				identityName = modelType.GetIdentityName();
-				hasIdentity = true;
-			}
-			else
-			{
-				identityName = modelType.TryGetIdentityName(string.Empty, ref hasIdentity);
-			}
-
-			List<string> members = new List<string>();
-			members.AddRange(columns.Select(pi => SqlColumnSyntax(pi, (identityName.Equals(pi.Name)))));
-			members.Add(PrimaryKeySyntax(constraintName, pkColumns));
-			if (!identityIsPrimaryKey && hasIdentity) members.Add(UniqueIdSyntax(constraintName, modelType.GetIdentityProperty()));
-
-			return
-				$"CREATE TABLE {ApplyDelimiter(tableName)} (" +
-					string.Join(",\r\n\t", members) +
-				")";
-		}
-
-		protected IEnumerable<PropertyInfo> GetPrimaryKeyColumns(Type type, IEnumerable<PropertyInfo> columns, out bool identityIsPrimaryKey)
-		{
-			identityIsPrimaryKey = false;
-			var result = columns.Where(pi => pi.HasAttribute<PrimaryKeyAttribute>());
-
-			if (!result.Any())
-			{
-				identityIsPrimaryKey = true;
-				result = new[] { type.GetIdentityProperty() };
-			}
-
-			return result;
-		}
-
-		protected abstract string PrimaryKeySyntax(string constraintName, IEnumerable<PropertyInfo> pkColumns);
-
-		protected abstract string UniqueIdSyntax(string constraintName, PropertyInfo identityProperty);
 	}
 }

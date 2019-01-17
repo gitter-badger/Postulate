@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Base.Models
+namespace Postulate.Lite.Core.Models
 {
 	public class TableInfo
 	{

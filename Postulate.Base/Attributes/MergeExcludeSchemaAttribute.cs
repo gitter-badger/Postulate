@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Base.Attributes
+namespace Postulate.Lite.Core.Attributes
 {
 	[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
 	public class MergeExcludeSchemaAttribute : Attribute

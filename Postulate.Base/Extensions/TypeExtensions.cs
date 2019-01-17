@@ -1,9 +1,9 @@
-﻿using Postulate.Base.Attributes;
+﻿using Postulate.Lite.Core.Attributes;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 
-namespace Postulate.Base.Extensions
+namespace Postulate.Lite.Core.Extensions
 {
 	public static class TypeExtensions
 	{

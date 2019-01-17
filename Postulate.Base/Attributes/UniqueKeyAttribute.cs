@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Postulate.Base.Attributes
+namespace Postulate.Lite.Core.Attributes
 {
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Class, AllowMultiple = false)]
 	public class UniqueKeyAttribute : Attribute
