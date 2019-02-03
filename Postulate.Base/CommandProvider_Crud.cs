@@ -202,7 +202,7 @@ namespace Postulate.Base
 		/// <param name="user">Information about the current user, used when object is based on <see cref="Record"/></param>
 		public async Task<TKey> InsertAsync<TModel>(IDbConnection connection, TModel @object, IUser user = null, string tableName = null)
 		{
-			var record = PreSave(connection, @object, user);
+			var record = await PreSaveAsync(connection, @object, user);
 
 			string cmd = InsertCommand<TModel>(tableName);
 			Trace.WriteLine($"InsertAsync: {cmd}");
@@ -248,6 +248,27 @@ namespace Postulate.Base
 			record?.AfterSave(connection, SaveAction.Insert);
 		}
 
+		private async Task<Record> PreSaveAsync<TModel>(IDbConnection connection, TModel @object, IUser user)
+		{
+			var record = @object as Record;
+			
+			if (record != null)
+			{
+				bool valid = await record.ValidateAsync(connection);
+				if (!valid) throw new ValidationException(record.ValidateAsyncMessage);				
+			}
+
+			if (user != null)
+			{
+				bool permission = await record.CheckFindPermissionAsync(connection, user);
+				if (!permission) throw new PermissionException($"User {user.UserName} does not have save permission on {typeof(TModel).Name}.");
+			}
+
+			record?.BeforeSave(connection, SaveAction.Insert, user);
+
+			return record;
+		}
+
 		/// <summary>
 		/// Executes validation, permission checks, and BeforeSave override on <see cref="Record"/> objects
 		/// </summary>
@@ -260,9 +281,11 @@ namespace Postulate.Base
 
 			if (user != null)
 			{
-				if (!record?.CheckSavePermission(connection, user) ?? false) throw new PermissionException($"User {user.UserName} does not have save permission on {typeof(TModel).Name}.");
-				record?.BeforeSave(connection, SaveAction.Insert, user);
+				if (!record?.CheckSavePermission(connection, user) ?? false) throw new PermissionException($"User {user.UserName} does not have save permission on {typeof(TModel).Name}.");				
 			}
+
+			record?.BeforeSave(connection, SaveAction.Insert, user);
+
 			return record;
 		}
 
