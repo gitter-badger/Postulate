@@ -39,7 +39,7 @@ There are two ways to merge your model class code to a database:
 
 - Use the free command line tool available [here](https://github.com/adamosoftware/Postulate.Merge). This tool merges only from C# to SQL Server, not from database to database. Note that I haven't given this a lot of love. I wanted to offer *some kind* of free tool to work with this library, but it's not my main focus.
 
-- Use my commercial GUI app [SQL Model Merge](https://aosoftware.net/Project/SqlModelMerge). There's more product info and a demo video at that link.
+- Use my commercial GUI app [SQL Model Merge](https://aosoftware.net/Project/SqlModelMerge). There's more product info and a demo video at that link. Note that as of Feb 2019, this is undergoing a significant overhaul (in a private repo) to take advantage of .NET Standard changes as well as to address various issues. I'll have a significant update soon.
 
 ## Examples
 
