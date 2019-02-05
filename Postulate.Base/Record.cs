@@ -1,6 +1,8 @@
 ﻿using Postulate.Base.Interfaces;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Postulate.Base
 {
@@ -16,6 +18,89 @@ namespace Postulate.Base
 	/// </summary>
 	public abstract class Record
 	{
+		#region async
+
+		/// <summary>
+		/// Set by ValidateAsync to the message associated with a failing validation
+		/// </summary>
+		[NotMapped]
+		public string ValidateAsyncMessage { get; private set; }
+
+		/// <summary>
+		/// Override this to verify the current user has permission to perform requested action
+		/// Throws <see cref="Exceptions.PermissionException"/> when permission denied
+		/// </summary>
+		public virtual async Task<bool> CheckSavePermissionAsync(IDbConnection connection, IUser user)
+		{
+			return await Task.FromResult(true);
+		}
+
+		public virtual async Task<bool> ValidateAsync(IDbConnection connection)
+		{
+			ValidateAsyncMessage = null;
+			return await Task.FromResult(true);
+		}
+
+		/// <summary>
+		/// Override this to apply any changes to a record immediately before it's saved, such as audit tracking fields
+		/// </summary>
+		public virtual Task BeforeSaveAsync(IDbConnection connection, SaveAction action, IUser user)
+		{
+			// do nothing by default			
+			return Task.CompletedTask;
+		}
+
+		/// <summary>
+		/// Override this to execute logic after a record is successfully saved
+		/// </summary>
+		public virtual Task AfterSaveAsync(IDbConnection connection, SaveAction action)
+		{
+			// do nothing by default
+			return Task.CompletedTask;
+		}
+
+		/// <summary>
+		/// Override this to verify that the user has permission to view the record that was just found
+		/// Throws <see cref="Exceptions.PermissionException"/> when permission denied
+		/// </summary>
+		public virtual async Task<bool> CheckFindPermissionAsync(IDbConnection connection, IUser user)
+		{
+			return await Task.FromResult(true);
+		}
+
+		/// <summary>
+		/// Override this to lookup related records
+		/// see https://github.com/adamosoftware/Postulate.Lite/wiki/Using-IFindRelated-to-implement-navigation-properties
+		/// </summary>
+		public virtual Task FindReferencedAsync(IDbConnection connection)
+		{
+			// do nothing by default
+			return Task.CompletedTask;
+		}
+
+		/// <summary>
+		/// Override this to verify the user has permission to delete this record
+		/// Throws <see cref="Exceptions.PermissionException"/> when permission denied
+		/// </summary>
+		public virtual async Task<bool> CheckDeletePermissionAsync(IDbConnection connection, IUser user)
+		{
+			return await Task.FromResult(true);
+		}
+
+		public virtual Task BeforeDeleteAsync(IDbConnection connection)
+		{
+			// do nothing by default
+			return Task.CompletedTask;
+		}
+
+		public virtual Task AfterDeleteAsync(IDbConnection connection)
+		{
+			// do nothing by default
+			return Task.CompletedTask;
+		}
+		#endregion
+
+		#region sync virtuals
 		/// <summary>
 		/// Override this to verify a record may be saved.
 		/// Throws <see cref="Exceptions.ValidationException"/> on failed validation
@@ -62,7 +147,7 @@ namespace Postulate.Base
 
 		/// <summary>
 		/// Override this to lookup related records
-		/// see https://github.com/adamosoftware/Postulate.Lite/wiki/Using-IFindRelated-to-implement-navigation-properties
+		/// see https://github.com/adamosoftware/Postulate/wiki/Using-IFindRelated-to-implement-navigation-properties
 		/// </summary>
 		public virtual void FindReferenced(IDbConnection connection)
 		{
@@ -87,5 +172,6 @@ namespace Postulate.Base
 		{
 			// do nothing by default
 		}
+		#endregion
 	}
 }
