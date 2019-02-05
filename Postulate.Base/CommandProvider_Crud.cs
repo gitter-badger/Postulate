@@ -219,6 +219,12 @@ namespace Postulate.Base
 
 			SetIdentity(@object, result);
 			record?.AfterSave(connection, SaveAction.Insert);
+
+			if (record != null)
+			{
+				await record.AfterSaveAsync(connection, SaveAction.Insert);
+			}
+			
 			return result;
 		}
 
@@ -255,13 +261,13 @@ namespace Postulate.Base
 			if (record != null)
 			{
 				bool valid = await record.ValidateAsync(connection);
-				if (!valid) throw new ValidationException(record.ValidateAsyncMessage);				
-			}
+				if (!valid) throw new ValidationException(record.ValidateAsyncMessage);
 
-			if (user != null)
-			{
-				bool permission = await record.CheckFindPermissionAsync(connection, user);
-				if (!permission) throw new PermissionException($"User {user.UserName} does not have save permission on {typeof(TModel).Name}.");
+				if (user != null)
+				{
+					bool permission = await record.CheckFindPermissionAsync(connection, user);
+					if (!permission) throw new PermissionException($"User {user.UserName} does not have save permission on {typeof(TModel).Name}.");
+				}
 			}
 
 			record?.BeforeSave(connection, SaveAction.Insert, user);
@@ -392,7 +398,7 @@ namespace Postulate.Base
 		/// <param name="user">Information about the current user, used when object is based on <see cref="Record"/></param>
 		public async Task UpdateAsync<TModel>(IDbConnection connection, TModel @object, IUser user = null, string tableName = null)
 		{
-			var record = PreSave(connection, @object, user);
+			var record = await PreSaveAsync(connection, @object, user);
 
 			string cmd = UpdateCommand<TModel>(tableName);
 			Trace.WriteLine($"UpdateAsync: {cmd}");
@@ -409,6 +415,11 @@ namespace Postulate.Base
 			}
 
 			record?.AfterSave(connection, SaveAction.Update);
+
+			if (record != null)
+			{
+				await record.AfterSaveAsync(connection, SaveAction.Update);
+			}			
 		}
 
 		/// <summary>
@@ -666,7 +677,11 @@ namespace Postulate.Base
 		{
 			var deleteMe = Find<TModel>(connection, identity, user, tableName);
 			var record = deleteMe as Record;
-			CheckDeletePermissionInternal<TModel>(connection, user, record);
+
+			if (user != null && record != null)
+			{
+				if (!record?.CheckDeletePermission(connection, user) ?? false) throw new PermissionException($"User {user.UserName} does not have delete permission on {typeof(TModel).Name}.");
+			}
 
 			string cmd = DeleteCommand<TModel>(tableName);
 			Trace.WriteLine($"Delete: {cmd}");
@@ -676,24 +691,26 @@ namespace Postulate.Base
 			record?.AfterDelete(connection);
 		}
 
-		private void CheckDeletePermissionInternal<TModel>(IDbConnection connection, IUser user, Record record)
-		{
-			if (user != null)
-			{
-				if (!record?.CheckDeletePermission(connection, user) ?? false) throw new PermissionException($"User {user.UserName} does not have delete permission on {typeof(TModel).Name}.");
-			}
-		}
-
 		public async Task DeleteAsync<TModel>(IDbConnection connection, TKey identity, IUser user = null, string tableName = null)
 		{
-			var deleteMe = Find<TModel>(connection, identity, user, tableName);
+			var deleteMe = await FindAsync<TModel>(connection, identity, user, tableName);
 			var record = deleteMe as Record;
-			CheckDeletePermissionInternal<TModel>(connection, user, record);
+			
+			if (user != null && record != null)
+			{
+				bool permission = await record?.CheckDeletePermissionAsync(connection, user);
+				if (!permission) throw new PermissionException($"User {user.UserName} does not have delete permission on {typeof(TModel).Name}.");
+			}
 
 			string cmd = DeleteCommand<TModel>(tableName);
 			await connection.ExecuteAsync(cmd, new { id = identity });
 
 			record?.AfterDelete(connection);
+
+			if (record != null)
+			{
+				await record.AfterDeleteAsync(connection);
+			}			
 		}
 
 		/// <summary>
