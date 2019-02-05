@@ -49,6 +49,11 @@ namespace Tests.Models
 			Organization = commandProvider.Find<Organization>(connection, OrganizationId);
 		}
 
+		public async Task FindRelatedAsync(IDbConnection connection, CommandProvider<int> commandProvider)
+		{
+			Organization = await commandProvider.FindAsync<Organization>(connection, OrganizationId);
+		}
+
 		public override bool CheckFindPermission(IDbConnection connection, IUser user)
 		{
 			return (!user.UserName.Equals("adamo"));
@@ -126,6 +131,11 @@ namespace Tests.Models
 		public void FindRelated(IDbConnection connection, CommandProvider<long> commandProvider)
 		{
 			Organization = commandProvider.Find<Organization>(connection, OrganizationId);
+		}
+
+		public async Task FindRelatedAsync(IDbConnection connection, CommandProvider<long> commandProvider)
+		{
+			Organization = await commandProvider.FindAsync<Organization>(connection, OrganizationId);
 		}
 	}
 

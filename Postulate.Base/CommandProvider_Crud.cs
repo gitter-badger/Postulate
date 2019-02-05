@@ -561,7 +561,7 @@ namespace Postulate.Base
 			string cmd = FindCommand<TModel>($"{ApplyDelimiter(identityCol)}=@id", tableName);
 			Trace.WriteLine($"FindAsync: {cmd}");
 			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, new { id = identity });
-			return FindInner(connection, result, user);
+			return await FindInnerAsync(connection, result, user);
 		}
 
 		/// <summary>
@@ -590,7 +590,7 @@ namespace Postulate.Base
 			string cmd = FindCommand<TModel>(whereClause, tableName);
 			Trace.WriteLine($"FindWhereAsync: {cmd}");
 			TModel result = await connection.QuerySingleOrDefaultAsync<TModel>(cmd, criteria);
-			return FindInner(connection, result, user);
+			return await FindInnerAsync(connection, result, user);
 		}
 
 		private TModel FindByPrimaryKey<TModel>(IDbConnection connection, TModel criteria, IUser user = null, string tableName = null)
@@ -653,6 +653,25 @@ namespace Postulate.Base
 			return false;
 		}
 
+		private async Task<TModel> FindInnerAsync<TModel>(IDbConnection connection, TModel result, IUser user)
+		{
+			var record = result as Record;
+
+			var lookup = result as IFindRelated<TKey>;
+			if (lookup != null) await lookup.FindRelatedAsync(connection, this);
+
+			if (user != null && record != null)
+			{
+				bool permission = await record.CheckFindPermissionAsync(connection, user);
+				if (!permission)
+				{
+					throw new PermissionException($"User {user.UserName} does not have find permission on a record of {typeof(TModel).Name}.");
+				}
+			}
+
+			return result;
+		}
+
 		private TModel FindInner<TModel>(IDbConnection connection, TModel result, IUser user)
 		{
 			var record = result as Record;
@@ -660,9 +679,9 @@ namespace Postulate.Base
 			var lookup = result as IFindRelated<TKey>;
 			if (lookup != null) lookup.FindRelated(connection, this);
 
-			if (user != null)
+			if (user != null && record != null)
 			{
-				if (!record?.CheckFindPermission(connection, user) ?? false)
+				if (!record.CheckFindPermission(connection, user))
 				{
 					throw new PermissionException($"User {user.UserName} does not have find permission on a record of {typeof(TModel).Name}.");
 				}

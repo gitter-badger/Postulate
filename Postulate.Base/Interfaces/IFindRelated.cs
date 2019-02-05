@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Threading.Tasks;
 
 namespace Postulate.Base.Interfaces
 {
@@ -11,5 +12,7 @@ namespace Postulate.Base.Interfaces
 		/// Use this to set navigation properties whenever a record is accessed
 		/// </summary>
 		void FindRelated(IDbConnection connection, CommandProvider<TKey> commandProvider);
+
+		Task FindRelatedAsync(IDbConnection connection, CommandProvider<TKey> commandProvider);
 	}
 }
