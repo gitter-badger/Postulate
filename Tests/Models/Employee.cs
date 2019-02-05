@@ -13,6 +13,8 @@ namespace Tests.Models
 	[Table("Employee")]
 	public class EmployeeInt : Record, IFindRelated<int>
 	{
+		public static DateTime DefaultDate = new DateTime(1900, 1, 1);
+
 		[References(typeof(Organization))]
 		public int OrganizationId { get; set; }
 
@@ -36,7 +38,7 @@ namespace Tests.Models
 
 		public bool IsActive { get; set; } = true;
 
-		public DateTime DateCreated { get; set; } = DateTime.MinValue;
+		public DateTime DateCreated { get; set; } = DefaultDate;
 
 		public DateTime? DateModified { get; set; }
 

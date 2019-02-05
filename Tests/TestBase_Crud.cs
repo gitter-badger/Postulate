@@ -414,7 +414,7 @@ namespace Tests
 				provider.CreateTable<EmployeeInt>(cn);
 
 				int id = await provider.SaveAsync(cn, e);
-				Assert.IsTrue(e.DateCreated > DateTime.MinValue);
+				Assert.IsTrue(e.DateCreated > EmployeeInt.DefaultDate);
 
 				e.Email = "whatever";
 
