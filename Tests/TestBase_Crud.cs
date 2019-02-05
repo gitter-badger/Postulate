@@ -398,6 +398,31 @@ namespace Tests
 			}
 		}
 
+		protected async Task EmployeeBeforeSaveAsyncShouldHaveTimestampBase()
+		{		
+			var e = new EmployeeInt()
+			{
+				FirstName = "Henry",
+				LastName = "Holt",
+				HireDate = new DateTime(1990, 1, 1)
+			};
+
+			var provider = GetIntProvider();
+			using (var cn = GetConnection())
+			{
+				DropTable(cn, "Employee");
+				provider.CreateTable<EmployeeInt>(cn);
+
+				int id = await provider.SaveAsync(cn, e);
+				Assert.IsTrue(e.DateCreated > DateTime.MinValue);
+
+				e.Email = "whatever";
+
+				await provider.SaveAsync(cn, e);
+				Assert.IsTrue(e.DateModified.HasValue);
+			}
+		}
+
 		/// <summary>
 		/// Query EmployeeInt table with single param WHERE LastName LIKE @lastName
 		/// </summary>

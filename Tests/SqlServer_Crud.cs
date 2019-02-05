@@ -248,6 +248,12 @@ namespace Tests.SqlServer
 		{
 			CommonAsyncCrudWithCustomTableBase();
 		}
+
+		[TestMethod]
+		public void EmployeeBeforeSaveAsyncShouldHaveTimestamp()
+		{
+			EmployeeBeforeSaveAsyncShouldHaveTimestampBase().Wait();
+		}
 	}
 
 	public class TestUser : IUser

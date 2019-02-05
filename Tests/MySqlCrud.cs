@@ -191,6 +191,12 @@ namespace Tests.MySql
 			CommonAsyncCrudWithCustomTableBase();
 		}
 
+		[TestMethod]
+		public void EmployeeBeforeSaveAsyncShouldHaveTimestamp()
+		{
+			EmployeeBeforeSaveAsyncShouldHaveTimestampBase().Wait();
+		}
+
 		protected override string GetEmployeeQueryByLastNameSyntax()
 		{
 			return "SELECT * FROM `Employee` WHERE `LastName` LIKE @lastName";

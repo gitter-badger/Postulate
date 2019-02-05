@@ -5,6 +5,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Tests.Models
 {
@@ -34,6 +35,10 @@ namespace Tests.Models
 		public DateTime? HireDate { get; set; }
 
 		public bool IsActive { get; set; } = true;
+
+		public DateTime DateCreated { get; set; } = DateTime.MinValue;
+
+		public DateTime? DateModified { get; set; }
 
 		public int Id { get; set; }
 
@@ -70,6 +75,22 @@ namespace Tests.Models
 			}
 
 			return true;
+		}
+
+		public override async Task BeforeSaveAsync(IDbConnection connection, SaveAction action, IUser user)
+		{
+			DateTime timestamp = user?.LocalTime ?? DateTime.UtcNow;
+
+			switch (action)
+			{
+				case SaveAction.Insert:
+					await Task.Run(() => { DateCreated = timestamp; });
+					break;
+
+				case SaveAction.Update:
+					await Task.Run(() => { DateModified = timestamp; });
+					break;
+			}
 		}
 	}
 
