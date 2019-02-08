@@ -16,7 +16,7 @@ namespace Postulate.Base
 	/// <summary>
 	/// Optionally use this as the basis for your model classes to add permission checks, validation, events, and foreign key lookups to your data access layer
 	/// </summary>
-	public abstract class Record
+	public abstract partial class Record
 	{
 		#region async
 
@@ -42,40 +42,12 @@ namespace Postulate.Base
 		}
 
 		/// <summary>
-		/// Override this to apply any changes to a record immediately before it's saved, such as audit tracking fields
-		/// </summary>
-		public virtual Task BeforeSaveAsync(IDbConnection connection, SaveAction action, IUser user)
-		{
-			// do nothing by default			
-			return Task.CompletedTask;
-		}
-
-		/// <summary>
-		/// Override this to execute logic after a record is successfully saved
-		/// </summary>
-		public virtual Task AfterSaveAsync(IDbConnection connection, SaveAction action)
-		{
-			// do nothing by default
-			return Task.CompletedTask;
-		}
-
-		/// <summary>
 		/// Override this to verify that the user has permission to view the record that was just found
 		/// Throws <see cref="Exceptions.PermissionException"/> when permission denied
 		/// </summary>
 		public virtual async Task<bool> CheckFindPermissionAsync(IDbConnection connection, IUser user)
 		{
 			return await Task.FromResult(true);
-		}
-
-		/// <summary>
-		/// Override this to lookup related records
-		/// see https://github.com/adamosoftware/Postulate.Lite/wiki/Using-IFindRelated-to-implement-navigation-properties
-		/// </summary>
-		public virtual Task FindReferencedAsync(IDbConnection connection)
-		{
-			// do nothing by default
-			return Task.CompletedTask;
 		}
 
 		/// <summary>
@@ -87,17 +59,6 @@ namespace Postulate.Base
 			return await Task.FromResult(true);
 		}
 
-		public virtual Task BeforeDeleteAsync(IDbConnection connection)
-		{
-			// do nothing by default
-			return Task.CompletedTask;
-		}
-
-		public virtual Task AfterDeleteAsync(IDbConnection connection)
-		{
-			// do nothing by default
-			return Task.CompletedTask;
-		}
 		#endregion
 
 		#region sync virtuals
@@ -143,15 +104,6 @@ namespace Postulate.Base
 		public virtual bool CheckFindPermission(IDbConnection connection, IUser user)
 		{
 			return true;
-		}
-
-		/// <summary>
-		/// Override this to lookup related records
-		/// see https://github.com/adamosoftware/Postulate/wiki/Using-IFindRelated-to-implement-navigation-properties
-		/// </summary>
-		public virtual void FindReferenced(IDbConnection connection)
-		{
-			// do nothing by default
 		}
 
 		/// <summary>
