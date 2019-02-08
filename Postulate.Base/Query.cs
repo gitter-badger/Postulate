@@ -92,7 +92,18 @@ namespace Postulate.Base
 							else
 							{
 								WhereAttribute whereAttr = pi.GetAttribute<WhereAttribute>();
-								terms.Add(whereAttr.Expression);
+								if (whereAttr != null)
+								{
+									terms.Add(whereAttr.Expression);
+								}
+								else
+								{
+									FullTextAttribute fullText = pi.GetAttribute<FullTextAttribute>();
+									if (fullText != null)
+									{
+										terms.Add(ParseFullTextExpression(fullText.ColumnNames, value.ToString()));
+									}
+								}
 							}
 						}
 					}
@@ -101,6 +112,11 @@ namespace Postulate.Base
 			}
 
 			return result;
+		}
+
+		private static string ParseFullTextExpression(string[] columnNames, string input)
+		{
+			throw new NotImplementedException();
 		}
 
 		private static bool HasValue(object value)
