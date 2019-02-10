@@ -47,6 +47,21 @@ namespace Tests
 			}
 		}
 
+		protected void InsertOrgBase()
+		{
+			var provider = GetIntProvider();
+
+			using (var cn = GetConnection())
+			{
+				DropTable(cn, "Organization");
+				provider.CreateTable<Organization>(cn);
+
+				var org = new Organization() { Name = "hello", EmployeeCount = 10 };
+				provider.Save(cn, org);
+				Assert.IsTrue(org.Id != 0);
+			}
+		}
+
 		protected void InsertEmployeesBase()
 		{
 			var provider = GetIntProvider();

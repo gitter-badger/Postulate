@@ -31,7 +31,7 @@ namespace Postulate.SqlServer
 		protected override string InsertCommand<T>(string tableName = null)
 		{
 			GetInsertComponents<T>(out string columnList, out string valueList);
-			return $"INSERT INTO {ApplyDelimiter(GetTableName<T>(tableName))} ({columnList}) OUTPUT [inserted].[{typeof(T).GetIdentityName()}] VALUES ({valueList});";
+			return $"INSERT INTO {ApplyDelimiter(GetTableName<T>(tableName))} ({columnList}) VALUES ({valueList}); SELECT SCOPE_IDENTITY()";
 		}
 
 		protected override string PlainInsertCommand<T>(string tableName = null)
