@@ -11,12 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Postulate.MySql", "Postulat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{C9914729-DFF3-42B7-AFE7-6E9DB518B6CE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DotNetFramework", "DotNetFramework", "{45A83093-164A-4064-ACA5-9D4BC2E58E00}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postulate.Base.Framework", "DotNetFramework\Postulate.Base\Postulate.Base.Framework.csproj", "{110623C2-DECD-40F3-AC9F-3884BA8589B2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postulate.SqlServer.Framework", "DotNetFramework\Postulate.SqlServer.Framework\Postulate.SqlServer.Framework.csproj", "{31BCEDC6-8EDF-43BB-8F1C-4AE79B2A4804}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,21 +33,9 @@ Global
 		{C9914729-DFF3-42B7-AFE7-6E9DB518B6CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9914729-DFF3-42B7-AFE7-6E9DB518B6CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9914729-DFF3-42B7-AFE7-6E9DB518B6CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{110623C2-DECD-40F3-AC9F-3884BA8589B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{110623C2-DECD-40F3-AC9F-3884BA8589B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{110623C2-DECD-40F3-AC9F-3884BA8589B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{110623C2-DECD-40F3-AC9F-3884BA8589B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{31BCEDC6-8EDF-43BB-8F1C-4AE79B2A4804}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{31BCEDC6-8EDF-43BB-8F1C-4AE79B2A4804}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{31BCEDC6-8EDF-43BB-8F1C-4AE79B2A4804}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{31BCEDC6-8EDF-43BB-8F1C-4AE79B2A4804}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{110623C2-DECD-40F3-AC9F-3884BA8589B2} = {45A83093-164A-4064-ACA5-9D4BC2E58E00}
-		{31BCEDC6-8EDF-43BB-8F1C-4AE79B2A4804} = {45A83093-164A-4064-ACA5-9D4BC2E58E00}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {361D8BB4-DFF6-4645-BDD5-180CD27573A1}
