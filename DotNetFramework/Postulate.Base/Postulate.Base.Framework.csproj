@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{110623C2-DECD-40F3-AC9F-3884BA8589B2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Postulate.Base</RootNamespace>
+    <AssemblyName>Postulate.Base</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Dapper.1.50.5\lib\net451\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Postulate.Base\Attributes\CalculatedAttribute.cs">
+      <Link>Attributes\CalculatedAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\CaseAttribute.cs">
+      <Link>Attributes\CaseAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\ColumnAccessAttribute.cs">
+      <Link>Attributes\ColumnAccessAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\DatabaseTypeAttribute.cs">
+      <Link>Attributes\DatabaseTypeAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\DecimalPrecisionAttribute.cs">
+      <Link>Attributes\DecimalPrecisionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\DefaultExpressionAttribute.cs">
+      <Link>Attributes\DefaultExpressionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\DereferenceIdAttribute.cs">
+      <Link>Attributes\DereferenceIdAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\IdentityAttribute.cs">
+      <Link>Attributes\IdentityAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\MergeExcludeSchemaAttribute.cs">
+      <Link>Attributes\MergeExcludeSchemaAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\PrimaryKeyAttribute.cs">
+      <Link>Attributes\PrimaryKeyAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\ReferencesAttribute.cs">
+      <Link>Attributes\ReferencesAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\SchemaAttribute.cs">
+      <Link>Attributes\SchemaAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\TrackChangesAttribute.cs">
+      <Link>Attributes\TrackChangesAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\UniqueKeyAttribute.cs">
+      <Link>Attributes\UniqueKeyAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Attributes\WhereAttribute.cs">
+      <Link>Attributes\WhereAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\CommandProvider_ChangeTracking.cs">
+      <Link>CommandProvider_ChangeTracking.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\CommandProvider_Crud.cs">
+      <Link>CommandProvider_Crud.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\CommandProvider_Merge.cs">
+      <Link>CommandProvider_Merge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Enums\SupportedPlatform.cs">
+      <Link>Enums\SupportedPlatform.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Exceptions\CrudException.cs">
+      <Link>Exceptions\CrudException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Exceptions\PermissionException.cs">
+      <Link>Exceptions\PermissionException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Exceptions\ValidationException.cs">
+      <Link>Exceptions\ValidationException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Extensions\ConnectionExtensions.cs">
+      <Link>Extensions\ConnectionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Extensions\IEnumerableExtensions.cs">
+      <Link>Extensions\IEnumerableExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Extensions\PropertyInfoExtensions.cs">
+      <Link>Extensions\PropertyInfoExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Extensions\StringInternal.cs">
+      <Link>Extensions\StringInternal.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Extensions\TypeExtensions.cs">
+      <Link>Extensions\TypeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Interfaces\IFindRelated.cs">
+      <Link>Interfaces\IFindRelated.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Interfaces\ITestableQuery.cs">
+      <Link>Interfaces\ITestableQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Interfaces\ITrackedRecord.cs">
+      <Link>Interfaces\ITrackedRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Interfaces\IUser.cs">
+      <Link>Interfaces\IUser.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Models\ColumnInfo.cs">
+      <Link>Models\ColumnInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Models\ForeignKeyInfo.cs">
+      <Link>Models\ForeignKeyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Models\IdLookup.cs">
+      <Link>Models\IdLookup.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Models\PropertyChange.cs">
+      <Link>Models\PropertyChange.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Models\PropertyChangeHistory.cs">
+      <Link>Models\PropertyChangeHistory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Models\RowVersion.cs">
+      <Link>Models\RowVersion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Models\TableInfo.cs">
+      <Link>Models\TableInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Query.cs">
+      <Link>Query.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\QueryTesting.cs">
+      <Link>QueryTesting.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\Record_base.cs">
+      <Link>Record_base.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Postulate.Base\SqlIntegrator.cs">
+      <Link>SqlIntegrator.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Record_virtuals.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
