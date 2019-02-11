@@ -64,6 +64,12 @@ namespace Tests.MySql
 		}
 
 		[TestMethod]
+		public void InsertOrg()
+		{
+			InsertOrgBase();
+		}
+
+		[TestMethod]
 		public void DeleteEmployee()
 		{
 			DeleteEmployeeBase();

@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postulate.Base", "Postulate.Base\Postulate.Base.csproj", "{E42BFAF3-76B1-4FBA-AA79-3282AD3A3BD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Postulate.Base", "Postulate.Base\Postulate.Base.csproj", "{E42BFAF3-76B1-4FBA-AA79-3282AD3A3BD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postulate.SqlServer", "Postulate.SqlServer\Postulate.SqlServer.csproj", "{4A888B73-9ED7-4AF6-8E44-87EBE5B01D43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Postulate.SqlServer", "Postulate.SqlServer\Postulate.SqlServer.csproj", "{4A888B73-9ED7-4AF6-8E44-87EBE5B01D43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Postulate.MySql", "Postulate.MySql\Postulate.MySql.csproj", "{BA87BB2F-502A-4ACF-8689-131FDE206BA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Postulate.MySql", "Postulate.MySql\Postulate.MySql.csproj", "{BA87BB2F-502A-4ACF-8689-131FDE206BA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{C9914729-DFF3-42B7-AFE7-6E9DB518B6CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{C9914729-DFF3-42B7-AFE7-6E9DB518B6CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

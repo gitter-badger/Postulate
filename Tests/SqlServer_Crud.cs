@@ -68,6 +68,12 @@ namespace Tests.SqlServer
 		}
 
 		[TestMethod]
+		public void InsertOrg()
+		{
+			InsertOrgBase();
+		}
+
+		[TestMethod]
 		public void DeleteEmployee()
 		{
 			DeleteEmployeeBase();
