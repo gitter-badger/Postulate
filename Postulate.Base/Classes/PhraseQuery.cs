@@ -21,7 +21,7 @@ namespace Postulate.Base.Classes
 			int index = 0;
 			Tokens.ToList().ForEach((qt) =>
 			{
-				string paramName = $"{propertyName}Search{++index}";
+				string paramName = $"{propertyName}{++index}";
 				Parameters.Add(paramName, qt.Value, DbType.String);
 				expressions.Add(ParamExpression(qt.IsNegated, paramName));
 			});
@@ -39,11 +39,11 @@ namespace Postulate.Base.Classes
 		{
 			var tokens = new List<PhraseQueryToken>();
 
-			string AddTokens(string tempInput, MatchCollection matches, Func<Match, PhraseQueryToken> selector)
+			string AddTokens(string tempInput, IEnumerable<string> matches, Func<string, PhraseQueryToken> selector)
 			{
-				if (matches.Count == 0) return tempInput;
-				tokens.AddRange(matches.OfType<Match>().Select(m => selector.Invoke(m)));
-				foreach (Match m in matches) tempInput = tempInput.Replace(m.Value, string.Empty);
+				if (matches.Count() == 0) return tempInput;
+				tokens.AddRange(matches.Select(s => selector.Invoke(s)));
+				foreach (string m in matches) tempInput = tempInput.Replace(m, string.Empty);
 				return tempInput;
 			};
 
@@ -51,15 +51,20 @@ namespace Postulate.Base.Classes
 			{
 				return Regex.Match(tempInput, "[^-\"]").Value;
 			};
+
+			IEnumerable<string> GetMatches(string inputInner, string pattern)
+			{
+				return Regex.Matches(inputInner, pattern).OfType<Match>().Select(m => m.Value);
+			}
 			
-			var quotedWords = Regex.Matches(input, "\"[^\"]*\"");
-			string remainder = AddTokens(input, quotedWords, (m) => new PhraseQueryToken() { Value = Unquote(m.Value) });
+			var quotedWords = GetMatches(input, "\"[^\"]*\"");
+			string remainder = AddTokens(input, quotedWords, (s) => new PhraseQueryToken() { Value = Unquote(s) });
 
-			var negatedQuoted = Regex.Matches(remainder, "-\"[^\"]*\"");
-			remainder = AddTokens(remainder, negatedQuoted, (m) => new PhraseQueryToken() { Value = Unquote(m.Value), IsNegated = true });
+			var negatedQuoted = GetMatches(remainder, "-\"[^\"]*\"");
+			remainder = AddTokens(remainder, negatedQuoted, (s) => new PhraseQueryToken() { Value = Unquote(s), IsNegated = true });
 
-			var words = Regex.Matches(remainder, "\\w"); // broken -- doesn't match whole words
-			AddTokens(remainder, words, (m) => new PhraseQueryToken() { Value = m.Value });
+			var words = remainder.Split(' ').Select(s => s.Trim());
+			AddTokens(remainder, words, (m) => PhraseQueryToken.FromString(m));
 
 			return tokens;
 		}
@@ -69,5 +74,12 @@ namespace Postulate.Base.Classes
 	{
 		public string Value { get; set; }
 		public bool IsNegated { get; set; }
+
+		public static PhraseQueryToken FromString(string input)
+		{
+			return (input.StartsWith("-")) ?
+				new PhraseQueryToken() { Value = input.Substring(1), IsNegated = true } :
+				new PhraseQueryToken() { Value = input };
+		}
 	}
 }

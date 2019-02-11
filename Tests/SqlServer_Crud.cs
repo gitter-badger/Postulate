@@ -271,6 +271,7 @@ namespace Tests.SqlServer
 			{
 				var results = qry.Execute(cn);
 				string sql = qry.ResolvedSql;
+				Assert.IsTrue(sql.Equals(@"SELECT * FROM [Employee] WHERE ([FirstName] LIKE '%' + @Search1 + '%' AND [FirstName] LIKE '%' + @Search2 + '%' AND [FirstName] LIKE '%' + @Search3 + '%') OR ([LastName] LIKE '%' + @Search1 + '%' AND [LastName] LIKE '%' + @Search2 + '%' AND [LastName] LIKE '%' + @Search3 + '%') OR ([Email] LIKE '%' + @Search1 + '%' AND [Email] LIKE '%' + @Search2 + '%' AND [Email] LIKE '%' + @Search3 + '%') OR ([Notes] LIKE '%' + @Search1 + '%' AND [Notes] LIKE '%' + @Search2 + '%' AND [Notes] LIKE '%' + @Search3 + '%')"));
 			}
 		}
 	}
