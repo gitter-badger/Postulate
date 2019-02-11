@@ -24,28 +24,33 @@ namespace Postulate.Base
 
 		public string Sql { get; private set; }
 		public string ResolvedSql { get; private set; }
+		public DynamicParameters Parameters { get; private set; }
 
 		public IEnumerable<TResult> Execute(IDbConnection connection)
 		{
 			ResolvedSql = ResolveQuery(this, LeadingColumnDelimiter, EndingColumnDelimiter, out DynamicParameters queryParams);
+			Parameters = queryParams;
 			return connection.Query<TResult>(ResolvedSql, queryParams);
 		}
 
 		public TResult ExecuteSingle(IDbConnection connection)
 		{
 			ResolvedSql = ResolveQuery(this, LeadingColumnDelimiter, EndingColumnDelimiter, out DynamicParameters queryParams);
+			Parameters = queryParams;
 			return connection.QuerySingle<TResult>(ResolvedSql, queryParams);
 		}
 
 		public async Task<TResult> ExecuteSingleAsync(IDbConnection connection)
 		{
 			ResolvedSql = ResolveQuery(this, LeadingColumnDelimiter, EndingColumnDelimiter, out DynamicParameters queryParams);
+			Parameters = queryParams;
 			return await connection.QuerySingleAsync<TResult>(ResolvedSql, queryParams);
 		}
 
 		public async Task<IEnumerable<TResult>> ExecuteAsync(IDbConnection connection)
 		{
 			ResolvedSql = ResolveQuery(this, LeadingColumnDelimiter, EndingColumnDelimiter, out DynamicParameters queryParams);
+			Parameters = queryParams;
 			return await connection.QueryAsync<TResult>(ResolvedSql, queryParams);
 		}
 
@@ -60,7 +65,7 @@ namespace Postulate.Base
 			foreach (var prop in queryProps)
 			{
 				var value = prop.GetValue(query);
-				if (value != null) queryParams.Add(prop.Name, value);
+				if (value != null && !prop.HasAttribute<PhraseQueryAttribute>()) queryParams.Add(prop.Name, value);
 			}
 
 			Dictionary<string, string> whereBuilder = new Dictionary<string, string>()

@@ -8,6 +8,7 @@ using Postulate.SqlServer.IntKey;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using Tests.Models;
 using Tests.Queries;
 
@@ -272,6 +273,21 @@ namespace Tests.SqlServer
 				var results = qry.Execute(cn);
 				string sql = qry.ResolvedSql;
 				Assert.IsTrue(sql.Equals(@"SELECT * FROM [Employee] WHERE ([FirstName] LIKE '%' + @Search1 + '%' AND [FirstName] LIKE '%' + @Search2 + '%' AND [FirstName] LIKE '%' + @Search3 + '%') OR ([LastName] LIKE '%' + @Search1 + '%' AND [LastName] LIKE '%' + @Search2 + '%' AND [LastName] LIKE '%' + @Search3 + '%') OR ([Email] LIKE '%' + @Search1 + '%' AND [Email] LIKE '%' + @Search2 + '%' AND [Email] LIKE '%' + @Search3 + '%') OR ([Notes] LIKE '%' + @Search1 + '%' AND [Notes] LIKE '%' + @Search2 + '%' AND [Notes] LIKE '%' + @Search3 + '%')"));
+				Assert.IsTrue(qry.Parameters.ParameterNames.SequenceEqual(new string[] { "Search1", "Search2", "Search3" }));
+			}
+		}
+
+		[TestMethod]
+		public void PhraseQueryQuoted()
+		{
+			var qry = new PhraseQueryTest() { Search = "\"hello kitty\" yes" };
+
+			using (var cn = GetConnection())
+			{
+				var results = qry.Execute(cn);
+				string sql = qry.ResolvedSql;
+				Assert.IsTrue(sql.Equals(@"SELECT * FROM [Employee] WHERE ([FirstName] LIKE '%' + @Search1 + '%' AND [FirstName] LIKE '%' + @Search2 + '%') OR ([LastName] LIKE '%' + @Search1 + '%' AND [LastName] LIKE '%' + @Search2 + '%') OR ([Email] LIKE '%' + @Search1 + '%' AND [Email] LIKE '%' + @Search2 + '%') OR ([Notes] LIKE '%' + @Search1 + '%' AND [Notes] LIKE '%' + @Search2 + '%')"));
+				Assert.IsTrue(qry.Parameters.ParameterNames.SequenceEqual(new string[] { "Search1", "Search2" }));
 			}
 		}
 	}

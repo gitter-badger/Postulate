@@ -63,7 +63,7 @@ namespace Postulate.Base.Classes
 			var negatedQuoted = GetMatches(remainder, "-\"[^\"]*\"");
 			remainder = AddTokens(remainder, negatedQuoted, (s) => new PhraseQueryToken() { Value = Unquote(s), IsNegated = true });
 
-			var words = remainder.Split(' ').Select(s => s.Trim());
+			var words = remainder.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim());
 			AddTokens(remainder, words, (m) => PhraseQueryToken.FromString(m));
 
 			return tokens;
