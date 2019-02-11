@@ -9,26 +9,23 @@ namespace Postulate.Base.Classes
 	internal class PhraseQuery
 	{
 		public IEnumerable<PhraseQueryToken> Tokens { get; }
-		public DynamicParameters Parameters { get; }
-		public string[] Terms { get; }
+		public DynamicParameters Parameters { get; }		
 		public string Expression { get; }
 
-		public PhraseQuery(string propertyName, string input)
+		public PhraseQuery(string propertyName, string input, string[] columnNames, char leadingColumnDelimiter, char endingColumnDelimiter)
 		{
 			Tokens = Parse(input);
-
 			Parameters = new DynamicParameters();
-			var termList = new List<string>();
+			var expressions = new List<string>();
 			int index = 0;
 			Tokens.ToList().ForEach((qt) =>
 			{
 				string paramName = $"{propertyName}Search{++index}";
 				Parameters.Add(paramName, qt.Value, DbType.String);
-				termList.Add(qt.GetExpression(paramName));
+				expressions.Add(qt.GetExpression(paramName));
 			});
-
-			Terms = termList.ToArray();
-			Expression = string.Join(" OR ", $"({string.Join(" AND ", Terms)})");
+			
+			Expression = string.Join(" OR ", columnNames.Select(col => $"({string.Join(" AND ", expressions.Select(expr => $"{leadingColumnDelimiter}{col}{endingColumnDelimiter} {expr}"))})"));
 		}
 
 		private static IEnumerable<PhraseQueryToken> Parse(string input)

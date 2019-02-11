@@ -27,29 +27,29 @@ namespace Postulate.Base
 
 		public IEnumerable<TResult> Execute(IDbConnection connection)
 		{
-			ResolvedSql = ResolveQuery(this, out DynamicParameters queryParams);
+			ResolvedSql = ResolveQuery(this, LeadingColumnDelimiter, EndingColumnDelimiter, out DynamicParameters queryParams);
 			return connection.Query<TResult>(ResolvedSql, queryParams);
 		}
 
 		public TResult ExecuteSingle(IDbConnection connection)
 		{
-			ResolvedSql = ResolveQuery(this, out DynamicParameters queryParams);
+			ResolvedSql = ResolveQuery(this, LeadingColumnDelimiter, EndingColumnDelimiter, out DynamicParameters queryParams);
 			return connection.QuerySingle<TResult>(ResolvedSql, queryParams);
 		}
 
 		public async Task<TResult> ExecuteSingleAsync(IDbConnection connection)
 		{
-			ResolvedSql = ResolveQuery(this, out DynamicParameters queryParams);
+			ResolvedSql = ResolveQuery(this, LeadingColumnDelimiter, EndingColumnDelimiter, out DynamicParameters queryParams);
 			return await connection.QuerySingleAsync<TResult>(ResolvedSql, queryParams);
 		}
 
 		public async Task<IEnumerable<TResult>> ExecuteAsync(IDbConnection connection)
 		{
-			ResolvedSql = ResolveQuery(this, out DynamicParameters queryParams);
+			ResolvedSql = ResolveQuery(this, LeadingColumnDelimiter, EndingColumnDelimiter, out DynamicParameters queryParams);
 			return await connection.QueryAsync<TResult>(ResolvedSql, queryParams);
 		}
 
-		private static string ResolveQuery(Query<TResult> query, out DynamicParameters queryParams)
+		private static string ResolveQuery(Query<TResult> query, char leadingColumnDelimiter, char endingColumnDelimiter, out DynamicParameters queryParams)
 		{
 			string result = query.Sql;
 
@@ -100,10 +100,10 @@ namespace Postulate.Base
 								}
 								else
 								{
-									PhraseQueryAttribute fullText = pi.GetAttribute<PhraseQueryAttribute>();
-									if (fullText != null)
+									PhraseQueryAttribute phrase = pi.GetAttribute<PhraseQueryAttribute>();
+									if (phrase != null)
 									{
-										var phraseQuery = new PhraseQuery(pi.Name, value.ToString());
+										var phraseQuery = new PhraseQuery(pi.Name, value.ToString(), phrase.ColumnNames, leadingColumnDelimiter, endingColumnDelimiter);
 										queryParams.AddDynamicParams(phraseQuery.Parameters);
 										terms.Add(phraseQuery.Expression);										
 									}
@@ -117,6 +117,18 @@ namespace Postulate.Base
 
 			return result;
 		}
+
+		/// <summary>
+		/// Used with PhraseQuery attribute when formatting column names in generated criteria.
+		/// Can be left alone for SQL Server, but must be overridden in MySQL with backtick (`)
+		/// </summary>
+		protected virtual char LeadingColumnDelimiter { get { return '['; } }
+
+		/// <summary>
+		/// Used with PhraseQuery attribute when formatting column names in generated criteria
+		/// Can be left alone for SQL Server, but must be overridden in MySQL with backtick (`)
+		/// </summary>
+		protected virtual char EndingColumnDelimiter { get { return ']'; } }
 
 		private static string FullTextExpression(string[] columnNames, string input)
 		{
@@ -166,7 +178,7 @@ namespace Postulate.Base
 		{
 			try
 			{
-				ResolvedSql = ResolveQuery(this, out DynamicParameters queryParams);
+				ResolvedSql = ResolveQuery(this, LeadingColumnDelimiter, EndingColumnDelimiter, out DynamicParameters queryParams);
 				return connection.Query(ResolvedSql, queryParams);
 			}
 			catch (Exception exc)
