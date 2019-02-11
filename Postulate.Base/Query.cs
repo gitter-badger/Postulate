@@ -130,17 +130,6 @@ namespace Postulate.Base
 		/// </summary>
 		protected virtual char EndingColumnDelimiter { get { return ']'; } }
 
-		private static string FullTextExpression(string[] columnNames, string input)
-		{
-			IEnumerable<PhraseQueryToken> terms = ParseFullTextTerms(input);
-			return string.Join(" OR ", $"({string.Join(" AND ", terms)})");
-		}
-
-		private static IEnumerable<PhraseQueryToken> ParseFullTextTerms(string input)
-		{
-			throw new NotImplementedException();
-		}
-
 		private static bool HasValue(object value)
 		{
 			if (value != null)
@@ -166,6 +155,7 @@ namespace Postulate.Base
 			var queryProps = query.GetType().GetProperties().Where(pi =>
 				pi.HasAttribute<WhereAttribute>() ||
 				pi.HasAttribute<CaseAttribute>() ||
+				pi.HasAttribute<PhraseQueryAttribute>() ||
 				builtInParamsArray.Contains(pi.Name.ToLower()));
 
 			return queryProps;

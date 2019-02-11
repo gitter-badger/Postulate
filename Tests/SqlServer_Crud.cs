@@ -9,6 +9,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using Tests.Models;
+using Tests.Queries;
 
 namespace Tests.SqlServer
 {
@@ -259,6 +260,18 @@ namespace Tests.SqlServer
 		public void EmployeeBeforeSaveAsyncShouldHaveTimestamp()
 		{
 			EmployeeBeforeSaveAsyncShouldHaveTimestampBase().Wait();
+		}
+
+		[TestMethod]
+		public void PhraseQuerySqlWordsOnly()
+		{
+			var qry = new PhraseQueryTest() { Search = "this that other" };
+
+			using (var cn = GetConnection())
+			{
+				var results = qry.Execute(cn);
+				string sql = qry.ResolvedSql;
+			}
 		}
 	}
 
