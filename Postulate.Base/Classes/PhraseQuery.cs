@@ -49,7 +49,10 @@ namespace Postulate.Base.Classes
 
 			string Unquote(string tempInput)
 			{
-				return Regex.Match(tempInput, "[^-\"]").Value;
+				string result = tempInput;
+				if (result.StartsWith("\"")) result = result.Substring(1);
+				if (result.EndsWith("\"")) result = result.Substring(0, result.Length - 1);
+				return result;
 			};
 
 			IEnumerable<string> GetMatches(string inputInner, string pattern)
