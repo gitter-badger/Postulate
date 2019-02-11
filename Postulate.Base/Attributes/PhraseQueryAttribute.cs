@@ -3,9 +3,9 @@
 namespace Postulate.Base.Attributes
 {
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-	public class FullTextAttribute : Attribute
+	public class PhraseQueryAttribute : Attribute
 	{
-		public FullTextAttribute(params string[] columnNames)
+		public PhraseQueryAttribute(params string[] columnNames)
 		{
 			ColumnNames = columnNames;
 		}

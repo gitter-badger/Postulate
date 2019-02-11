@@ -1,6 +1,8 @@
 ﻿using Dapper;
 using Postulate.Base.Attributes;
+using Postulate.Base.Classes;
 using Postulate.Base.Extensions;
+using Postulate.Base.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -98,10 +100,12 @@ namespace Postulate.Base
 								}
 								else
 								{
-									FullTextAttribute fullText = pi.GetAttribute<FullTextAttribute>();
+									PhraseQueryAttribute fullText = pi.GetAttribute<PhraseQueryAttribute>();
 									if (fullText != null)
 									{
-										terms.Add(ParseFullTextExpression(fullText.ColumnNames, value.ToString()));
+										var phraseQuery = new PhraseQuery(pi.Name, value.ToString());
+										queryParams.AddDynamicParams(phraseQuery.Parameters);
+										terms.Add(phraseQuery.Expression);										
 									}
 								}
 							}
@@ -114,7 +118,13 @@ namespace Postulate.Base
 			return result;
 		}
 
-		private static string ParseFullTextExpression(string[] columnNames, string input)
+		private static string FullTextExpression(string[] columnNames, string input)
+		{
+			IEnumerable<PhraseQueryToken> terms = ParseFullTextTerms(input);
+			return string.Join(" OR ", $"({string.Join(" AND ", terms)})");
+		}
+
+		private static IEnumerable<PhraseQueryToken> ParseFullTextTerms(string input)
 		{
 			throw new NotImplementedException();
 		}
