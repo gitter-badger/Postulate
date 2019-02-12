@@ -28,5 +28,5 @@ using (var cn = GetConnection())
 - Inline SQL is more productive than Linq, but it needs to be isolated and testable with the [Query](https://github.com/adamosoftware/Postulate/wiki/Using-the-Query-class) class.
 
 ## Nuget Packages
-- Postulate.SqlServer
-- Postulate.MySql
+- [Postulate.SqlServer](https://www.nuget.org/packages/Postulate.SqlServer)
+- [Postulate.MySql](https://www.nuget.org/packages/Postulate.MySql)
