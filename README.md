@@ -26,3 +26,7 @@ using (var cn = GetConnection())
 - Code-first is a neat idea, but I don't want to write migrations. The [SchemaSync](https://github.com/adamosoftware/SchemaSync) project powers my database diff/merge app [SQL Model Merge](https://aosoftware.net/Project/SqlModelMerge).
 
 - Inline SQL is more productive than Linq, but it needs to be isolated and testable with the [Query](https://github.com/adamosoftware/Postulate/wiki/Using-the-Query-class) class.
+
+## Nuget Packages
+- Postulate.SqlServer
+- Postulate.MySql
