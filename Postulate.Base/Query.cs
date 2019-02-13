@@ -92,7 +92,7 @@ namespace Postulate.Base
 							else
 							{
 								WhereAttribute whereAttr = pi.GetAttribute<WhereAttribute>();
-								terms.Add(whereAttr.Expression);
+								if (whereAttr != null) terms.Add(whereAttr.Expression);
 							}
 						}
 					}
