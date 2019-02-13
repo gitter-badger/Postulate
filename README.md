@@ -30,36 +30,8 @@ Install the Nuget package for your platform:
 - [Postulate.SqlServer](https://www.nuget.org/packages/Postulate.SqlServer)
 - [Postulate.MySql](https://www.nuget.org/packages/Postulate.MySql)
 
-SQL Server offers a choice of key types on your model classes: `int`, `long` and `Guid`. MySQL currently supports `int` only. In your code where you want to use Postulate [extension methods](https://github.com/adamosoftware/Postulate/wiki/Crud-method-reference), add the namespace for your platform and key type:
+In the SQL Server package, there are three primary key types supported: `int`, `long`, and `Guid`. Import the appropriate namespace for the key type you want to use: `Postulate.SqlServer.IntKey`, `LongKey`, and `GuidKey` respectively. See [SQL Server CRUD Methods](https://github.com/adamosoftware/Postulate/wiki/SQL-Server-CRUD-Methods)
 
-`using Postulate.SqlServer.IntKey` 
+The MySql package supports only `int` key types via namespace `Postulate.MySql.IntKey`. See [MySQL CRUD Methods](https://github.com/adamosoftware/Postulate/wiki/MySQL-CRUD-Methods)
 
-or
-
-`using Postulate.SqlServer.LongKey` 
-
-or
-
-`using Postulate.SqlServer.GuidKey` 
-
-or
-
-`using Postulate.MySql.IntKey`
-
-On each of your model classes, add an `Id` property using the type you decided on. If it's inconvenient to have an `Id` property, you can designate the key property explictly by adding the [Identity](https://github.com/adamosoftware/Postulate/blob/master/Postulate.Base/Attributes/IdentityAttribute.cs) attribute to the class. For example:
-```
-public class OrderHeader
-{
-  public int Id { get; set; } // implicit key property
-  ...
-}
-```
-or with `Identity` attribute:
-```
-[Identity(nameof(OrderHeaderId))]
-public class OrderHeader
-{
-  public int OrderHeaderId { get; set; } // explicit key property
-}
-```
-Learn more at the [Wiki](https://github.com/adamosoftware/Postulate/wiki).
+Both MySQL and SQL Server providers, as well as any new back-ends implemented should reference these [base CRUD methods](https://github.com/adamosoftware/Postulate/wiki/Crud-method-reference) and surface them as extension methods.
