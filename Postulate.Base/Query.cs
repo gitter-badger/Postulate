@@ -70,8 +70,6 @@ namespace Postulate.Base
 			string token;
 			if (result.ContainsAny(whereBuilder.Select(kp => kp.Key), out token))
 			{
-				bool anyCriteria = false;
-
 				// loop through this query's properties, but ignore base properties (like ResolvedSql and TraceCallback) since they are never part of WHERE clause
 				foreach (var pi in queryProps)
 				{
@@ -81,8 +79,6 @@ namespace Postulate.Base
 						// built-in params are not part of the WHERE clause, so they are excluded from added terms
 						if (!builtInParams.Contains(pi.Name.ToLower()))
 						{
-							anyCriteria = true;
-
 							var cases = pi.GetCustomAttributes(typeof(CaseAttribute), false).OfType<CaseAttribute>();
 							var selectedCase = cases?.FirstOrDefault(c => c.Value.Equals(value));
 							if (selectedCase != null)
@@ -97,7 +93,8 @@ namespace Postulate.Base
 						}
 					}
 				}
-				result = result.Replace(token, (anyCriteria) ? $"{whereBuilder[token]} {string.Join(" AND ", terms)}" : string.Empty);
+
+				result = result.Replace(token, (terms.Any()) ? $"{whereBuilder[token]} {string.Join(" AND ", terms)}" : string.Empty);
 			}
 
 			return result;

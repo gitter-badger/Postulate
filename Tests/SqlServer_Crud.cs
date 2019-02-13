@@ -9,6 +9,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using Tests.Models;
+using Tests.Queries;
 
 namespace Tests.SqlServer
 {
@@ -259,6 +260,50 @@ namespace Tests.SqlServer
 		public void EmployeeBeforeSaveAsyncShouldHaveTimestamp()
 		{
 			EmployeeBeforeSaveAsyncShouldHaveTimestampBase().Wait();
+		}
+
+		[TestMethod]
+		public void EmployeeQueryEmptyWhere()
+		{
+			var qry = new EmployeeEmptyWhere();
+			using (var cn = GetConnection())
+			{
+				var results = qry.Execute(cn);
+				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT * FROM [dbo].[Employee]  ORDER BY [LastName]"));
+			}
+		}
+
+		[TestMethod]
+		public void EmployeeQueryEmptyWithLastName()
+		{
+			var qry = new EmployeeEmptyWhere() { LastName = "yodo" };
+			using (var cn = GetConnection())
+			{
+				var results = qry.Execute(cn);
+				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT * FROM [dbo].[Employee] WHERE [LastName] LIKE @lastName ORDER BY [LastName]"));
+			}
+		}
+
+		[TestMethod]
+		public void EmployeeQueryAndWhereNoCriteria()
+		{
+			var qry = new EmployeesAndWhere();
+			using (var cn = GetConnection())
+			{
+				var results = qry.Execute(cn);
+				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT * FROM [dbo].[Employee] WHERE [IsActive]=1  ORDER BY [LastName]"));
+			}
+		}
+
+		[TestMethod]
+		public void EmployeeQueryAndWhereWithCriteria()
+		{
+			var qry = new EmployeesAndWhere() { LastName = "wonga" };
+			using (var cn = GetConnection())
+			{
+				var results = qry.Execute(cn);
+				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT * FROM [dbo].[Employee] WHERE [IsActive]=1 AND [LastName] LIKE @lastName ORDER BY [LastName]"));
+			}
 		}
 	}
 
