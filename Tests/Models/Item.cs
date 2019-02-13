@@ -35,8 +35,8 @@ namespace Tests.Models
 	}
 
 	[Identity(nameof(Id))]
-	[DereferenceId(typeof(SqlConnection), "SELECT [Name] FROM [ItemType] WHERE [Id]=@id")]
-	[DereferenceId(typeof(MySqlConnection), "SELECT `Name` FROM `ItemType` WHERE `Id`=@id")]
+	[LookupName(typeof(SqlConnection), "SELECT [Name] FROM [ItemType] WHERE [Id]=@id")]
+	[LookupName(typeof(MySqlConnection), "SELECT `Name` FROM `ItemType` WHERE `Id`=@id")]
 	public class ItemType
 	{
 		public int Id { get; set; }

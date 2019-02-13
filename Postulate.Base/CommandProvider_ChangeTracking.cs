@@ -40,6 +40,37 @@ namespace Postulate.Base
 
 		protected abstract string SqlInsertRowVersion(string tableName);
 
+		public IEnumerable<ChangeHistory<TKey>> QueryChangeHistory<TModel>(IDbConnection connection, TKey id, int timeZoneOffset = 0)
+		{
+			TableInfo obj = Syntax.GetTableInfoFromType(typeof(TModel));
+			string tableName = $"{obj.Schema}_{obj.Name}";
+
+
+			var results = connection.Query<PropertyChangeHistory<TKey>>(
+				$@"SELECT * FROM [{_changesSchema}].[{tableName}] WHERE [RecordId]=@id ORDER BY [DateTime] DESC", new { id });
+
+			return results.GroupBy(item => new
+			{
+				item.RecordId,
+				item.Version
+			}).Select(ch =>
+			{
+				return new ChangeHistory<TKey>()
+				{
+					RecordId = ch.Key.RecordId,
+					DateTime = ch.First().DateTime.AddHours(timeZoneOffset),
+					Version = ch.Key.Version,
+					UserName = ch.First().UserName,
+					Properties = ch.Select(chr => new PropertyChange()
+					{
+						PropertyName = chr.ColumnName,
+						OldValue = chr.OldValue,
+						NewValue = chr.NewValue
+					})
+				};
+			});
+		}
+
 		private async Task<IEnumerable<PropertyChange>> GetChangesAsync<TModel>(IDbConnection connection, TModel @object)
 		{
 			if (IsTrackingChanges<TModel>(out string[] ignoreProperties))
@@ -228,30 +259,35 @@ namespace Postulate.Base
 		{
 			object result = propertyInfo.GetValue(record);
 			if (result == null) return null;
-
-			if (DereferenceId(connection, propertyInfo, out DereferenceIdAttribute attr))
-			{
-				var lookup = connection.QuerySingleOrDefault<IdLookup>(attr.Query, new { id = result });
-				if (lookup != null) result = lookup.Name;
-			}
-
+			if (GetNameFromId(connection, propertyInfo, result, out string name)) result = name;
 			return result;
 		}
 
-		private bool DereferenceId(IDbConnection connection, PropertyInfo propertyInfo, out DereferenceIdAttribute attr)
+		private bool GetNameFromId(IDbConnection connection, PropertyInfo propertyInfo, object id, out string name)
 		{
 			var fk = propertyInfo.GetAttribute<ReferencesAttribute>();
 			if (fk != null)
 			{
-				var attributes = fk.PrimaryType.GetCustomAttributes<DereferenceIdAttribute>();
-				attr = attributes.FirstOrDefault(a => a.ConnectionType?.Equals(connection.GetType()) ?? false);
-				if (attr != null) return true;
-
-				attr = attributes.FirstOrDefault();
-				return (attr != null);
+				var instance = Activator.CreateInstance(fk.PrimaryType);
+				var lookup = instance as INameLookup;
+				if (lookup != null)
+				{
+					string idCol = fk.PrimaryType.GetIdentityName();
+					string tableName = GetTableName(fk.PrimaryType, null);
+					string query = $"SELECT {lookup.NameExpression} FROM {ApplyDelimiter(tableName)} WHERE {ApplyDelimiter(idCol)}=@id";
+					try
+					{
+						name = connection.QuerySingle<string>(query, new { id });
+						return true;
+					}
+					catch (Exception exc)
+					{
+						throw new Exception($"Tried to lookup a Name in table {tableName} for Id value {id}, but an error occurred: {exc.Message}");
+					}
+				}
 			}
 
-			attr = null;
+			name = null;
 			return false;
 		}
 	}
