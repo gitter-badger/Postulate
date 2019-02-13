@@ -2,7 +2,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/i8uoaftti334xuth/branch/master?svg=true)](https://ci.appveyor.com/project/adamosoftware/postulate/branch/master)
 
-Postulate is a CRUD library of extension methods for SQL Server and MySQL based on [Dapper](https://github.com/StackExchange/Dapper).
+Postulate is a library of `IDbConnection` [extension methods](https://github.com/adamosoftware/Postulate/wiki/Crud-method-reference) for SQL Server and MySQL made with [Dapper](https://github.com/StackExchange/Dapper). Here are examples with `FindAsync` and `SaveAsync`.
 
 ```
 using (var cn = GetConnection())
@@ -27,6 +27,41 @@ using (var cn = GetConnection())
 
 - Inline SQL is more productive than Linq, but it needs to be isolated and testable with the [Query](https://github.com/adamosoftware/Postulate/wiki/Using-the-Query-class) class.
 
-## Nuget Packages
+## Getting Started
+Install the Nuget package for your platform:
 - [Postulate.SqlServer](https://www.nuget.org/packages/Postulate.SqlServer)
 - [Postulate.MySql](https://www.nuget.org/packages/Postulate.MySql)
+
+SQL Server offers a choice of key types on your model classes: `int`, `long` and `Guid`. MySQL currently supports `int` only. In your code where you want to use Postulate [extension methods](https://github.com/adamosoftware/Postulate/wiki/Crud-method-reference), add the namespace for your platform and key type:
+
+`using Postulate.SqlServer.IntKey` 
+
+or
+
+`using Postulate.SqlServer.LongKey` 
+
+or
+
+`using Postulate.SqlServer.GuidKey` 
+
+or
+
+`using Postulate.MySql.IntKey`
+
+On each of your model classes, add an `Id` property using the type you decided on. If it's inconvenient to have an `Id` property, you can designate the key property explictly by adding the [Identity](https://github.com/adamosoftware/Postulate/blob/master/Postulate.Base/Attributes/IdentityAttribute.cs) attribute to the class. For example:
+```
+public class OrderHeader
+{
+  public int Id { get; set; } // implicit key property
+  ...
+}
+```
+or with `Identity` attribute:
+```
+[Identity(nameof(OrderHeaderId))]
+public class OrderHeader
+{
+  public int OrderHeaderId { get; set; } // explicit key property
+}
+```
+Learn more at the [Wiki](https://github.com/adamosoftware/Postulate/wiki).
