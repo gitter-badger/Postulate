@@ -9,7 +9,7 @@ namespace Tests.Queries
 		{
 		}
 
-		[PhraseQuery("FirstName", "LastName", "Email", "Notes")]
+		[Phrase("FirstName", "LastName", "Email", "Notes")]
 		public string Search { get; set; }
 	}
 }

@@ -65,7 +65,7 @@ namespace Postulate.Base
 			foreach (var prop in queryProps)
 			{
 				var value = prop.GetValue(query);
-				if (value != null && !prop.HasAttribute<PhraseQueryAttribute>()) queryParams.Add(prop.Name, value);
+				if (value != null && !prop.HasAttribute<PhraseAttribute>()) queryParams.Add(prop.Name, value);
 			}
 
 			Dictionary<string, string> whereBuilder = new Dictionary<string, string>()
@@ -101,7 +101,7 @@ namespace Postulate.Base
 								}
 								else
 								{
-									PhraseQueryAttribute phrase = pi.GetAttribute<PhraseQueryAttribute>();
+									PhraseAttribute phrase = pi.GetAttribute<PhraseAttribute>();
 									if (phrase != null)
 									{
 										var phraseQuery = new PhraseQuery(pi.Name, value.ToString(), phrase.ColumnNames, leadingColumnDelimiter, endingColumnDelimiter);
@@ -157,7 +157,7 @@ namespace Postulate.Base
 			var queryProps = query.GetType().GetProperties().Where(pi =>
 				pi.HasAttribute<WhereAttribute>() ||
 				pi.HasAttribute<CaseAttribute>() ||
-				pi.HasAttribute<PhraseQueryAttribute>() ||
+				pi.HasAttribute<PhraseAttribute>() ||
 				builtInParamsArray.Contains(pi.Name.ToLower()));
 
 			return queryProps;

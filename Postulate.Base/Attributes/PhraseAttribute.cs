@@ -3,9 +3,9 @@
 namespace Postulate.Base.Attributes
 {
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-	public class PhraseQueryAttribute : Attribute
+	public class PhraseAttribute : Attribute
 	{
-		public PhraseQueryAttribute(params string[] columnNames)
+		public PhraseAttribute(params string[] columnNames)
 		{
 			ColumnNames = columnNames;
 		}
