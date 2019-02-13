@@ -1,8 +1,6 @@
-# Postulate ORM
-
 [![Build status](https://ci.appveyor.com/api/projects/status/i8uoaftti334xuth/branch/master?svg=true)](https://ci.appveyor.com/project/adamosoftware/postulate/branch/master)
 
-Postulate is a CRUD library of extension methods for SQL Server and MySQL based on [Dapper](https://github.com/StackExchange/Dapper).
+Postulate is a library of `IDbConnection` [extension methods](https://github.com/adamosoftware/Postulate/wiki/Crud-method-reference) for SQL Server and MySQL made with [Dapper](https://github.com/StackExchange/Dapper). Here are examples with `FindAsync` and `SaveAsync`.
 
 ```
 using (var cn = GetConnection())
@@ -27,6 +25,13 @@ using (var cn = GetConnection())
 
 - Inline SQL is more productive than Linq, but it needs to be isolated and testable with the [Query](https://github.com/adamosoftware/Postulate/wiki/Using-the-Query-class) class.
 
-## Nuget Packages
+## Getting Started
+Install the Nuget package for your platform:
 - [Postulate.SqlServer](https://www.nuget.org/packages/Postulate.SqlServer)
 - [Postulate.MySql](https://www.nuget.org/packages/Postulate.MySql)
+
+In the SQL Server package, there are three primary key types supported: `int`, `long`, and `Guid`. Import the appropriate namespace for the key type you want to use: `Postulate.SqlServer.IntKey`, `LongKey`, and `GuidKey` respectively. See [SQL Server CRUD Methods](https://github.com/adamosoftware/Postulate/wiki/SQL-Server-CRUD-Methods)
+
+The MySql package supports only `int` key types via namespace `Postulate.MySql.IntKey`. See [MySQL CRUD Methods](https://github.com/adamosoftware/Postulate/wiki/MySQL-CRUD-Methods)
+
+Both MySQL and SQL Server providers, as well as any new back-ends implemented should reference these [base CRUD methods](https://github.com/adamosoftware/Postulate/wiki/Crud-method-reference) and surface them as extension methods.
