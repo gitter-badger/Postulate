@@ -1,82 +1,37 @@
-# Postulate ORM
-
 [![Build status](https://ci.appveyor.com/api/projects/status/i8uoaftti334xuth/branch/master?svg=true)](https://ci.appveyor.com/project/adamosoftware/postulate/branch/master)
 
-Note: this project targets .NET Standard 2.0, and replaces my [Postulate.Lite](https://github.com/adamosoftware/Postulate.Lite) project.
-
-Postulate is a code-first ORM built around [Dapper](https://github.com/StackExchange/Dapper) that performs CRUD operations on your model types. It's an evolution of my [Postulate.Orm](https://github.com/adamosoftware/Postulate.Orm) project that is
-- more POCO-friendly, having no base type dependency
-- easier to use thanks to extension methods (inspired by [Dapper.SimpleCRUD](https://github.com/ericdc1/Dapper.SimpleCRUD))
-- has a more robust, general-purpose schema merge capability, using my [SchemaSync project](https://github.com/adamosoftware/SchemaSync)
-- has a free app [Postulate Query Helper](https://github.com/adamosoftware/Postulate.Zinger) and a commercial app [SQL Model Merge](https://aosoftware.net/Project/SqlModelMerge) for merging model class and database changes
-
-Postulate is not a Linq replacement. In my applications, I use inline SQL with Postulate's [Query&lt;T&gt;](https://github.com/adamosoftware/Postulate/blob/master/Postulate.Base/Query.cs) type. Please see the [wiki](https://github.com/adamosoftware/Postulate/wiki/Using-the-Query-class) page on this.
-
-Check out my [Medium.com post](https://medium.com/@adamosoftware/postulate-lite-orm-2cf9205d0cb3), which has more background, although the GitHub links in that article point to the "Lite" repository. There've been no relevant code changes from that version, though, so those links are still useful for learning purposes.
-
-## Nuget
-
-- SQL Server package: **Postulate.SqlServer**
-- MySql package: **Postulate.MySql**
-
-## How to Use
-
-- Create any number of model classes that correspond to your database tables. They can be POCO, but added functionality is available if you inherit from [Postulate.Base.Record](https://github.com/adamosoftware/Postulate/blob/master/Postulate.Base/Record.cs). The only design requirement for Postulate model classes is that either they have an [[Identity]](https://github.com/adamosoftware/Postulate/blob/master/Postulate.Base/Attributes/IdentityAttribute.cs) attribute that defines the primary key property, or they have a property called **Id** with no particular attribute decoration. You can also use the [[PrimaryKey]](https://github.com/adamosoftware/Postulate/blob/master/Postulate.Base/Attributes/PrimaryKeyAttribute.cs) attribute on select properties to define an explicit primary key -- of either one or multiple properties.
-
-- Use the [[References]](https://github.com/adamosoftware/Postulate/blob/master/Postulate.Base/Attributes/ReferencesAttribute.cs) attribute to define foreign keys on properties.
-
-- For Sql Server, Postulate supports `int`, `Guid`, and `long` identity types. MySql currently supports `int`. When creating your model classes, decide on an identity type and be consistent across all your model classes.
-
-- Open your `IDbConnection` object in whatever way is appropriate for your application, normally within a `using` block.
-
-- Use any of the Postulate Crud extension methods of `IDbConnection`: Find, FindWhere, Save, Insert, Update, Delete, Exists, and ExistsWhere. They all accept a `TModel` generic argument corresponding to your model class. In the SQL Server package, there are three different namespaces with a static `ConnectionExtensions` class that provides the crud methods: [Postulate.SqlServer.IntKey](https://github.com/adamosoftware/Postulate/blob/master/Postulate.SqlServer/IntKey/ConnectionExtensions.cs), [LongKey](https://github.com/adamosoftware/Postulate/blob/master/Postulate.SqlServer/LongKey/ConnectionExtensions.cs), and [GuidKey](https://github.com/adamosoftware/Postulate/blob/master/Postulate.SqlServer/GuidKey/ConnectionExtensions.cs), so use the namespace appropriate to the identity type you chose above.
-
-- All of the Crud methods accept an `IUser` optional argument you can use to pass the current user name and access to the user's local time. This argument takes effect if your model class is based on `Record` (see above), which offers a number of overrides for checking permissions and executing row-level events, looking up foreign keys, among other things.
-
-## Code-first Migration
-
-There are two ways to merge your model class code to a database:
-
-- Use the free command line tool available [here](https://github.com/adamosoftware/Postulate.Merge). This tool merges only from C# to SQL Server, not from database to database. Note that I haven't given this a lot of love. I wanted to offer *some kind* of free tool to work with this library, but it's not my main focus.
-
-- Use my commercial GUI app [SQL Model Merge](https://aosoftware.net/Project/SqlModelMerge). There's more product info and a demo video at that link. Note that as of Feb 2019, this is undergoing a significant overhaul (in a private repo) to take advantage of .NET Standard changes as well as to address various issues. I'll have a significant update soon.
-
-## Examples
-
-A simple find using the [Find](https://github.com/adamosoftware/Postulate/blob/master/Postulate.Base/CommandProvider_Crud.cs#L489) method:
+Postulate is a library of `IDbConnection` [extension methods](https://github.com/adamosoftware/Postulate/wiki/Crud-method-reference) for SQL Server and MySQL made with [Dapper](https://github.com/StackExchange/Dapper). Here are examples with `FindAsync` and `SaveAsync`.
 
 ```
 using (var cn = GetConnection())
 {
-  var e = cn.Find<Employee>(2322);
-  Console.WriteLine(e.FirstName);
-}
-```
-
-Find using criteria with the [FindWhere](https://github.com/adamosoftware/Postulate/blob/master/Postulate.Base/CommandProvider_Crud.cs#L541) method:
-```
-using (var cn = GetConnection())
-{
-  var e = cn.FindWhere(new { OrganizationId = 12, Number = 3988 });
-  Console.WriteLine(e.FirstName);
-}
-```
-
-Create and save a record with the [Save](https://github.com/adamosoftware/Postulate/blob/master/Postulate.Base/CommandProvider_Crud.cs#L425) method.
-```
-using (var cn = GetConnection())
-{
-  var e = new Employee()
+  // find a record
+  var order = await cn.FindAsync<Order>(id);
+  
+  // create and save
+  var employee = new Employee()
   {
-    FirstName = "Thomas",
-    LastName = "Whoever",
-    HireDate = new DateTime(2012, 1, 1)
+    FirstName = "Whoever",
+    LastName = "Nobody",
+    HireDate = new DateTime(2002, 3, 13)
   };
-  cn.Save<Employee>(e);
-  Console.WriteLine(e.Id.ToString());
+  await cn.SaveAsync<Employee>(employee);
 }
 ```
+## Why another ORM framework?
+- Entity Framework is too big and complicated. Let's keep ORM lightweight, but capable. See the list of CRUD methods [here](https://github.com/adamosoftware/Postulate/wiki/Crud-method-reference). POCO is fine, but do more with [Record](https://github.com/adamosoftware/Postulate/wiki/Use-Base.Record-and-IUser-for-audit-tracking-and-more) and [navigation properties](https://github.com/adamosoftware/Postulate/wiki/Using-IFindRelated-to-implement-navigation-properties).
 
-## Extending Postulate
+- Code-first is a neat idea, but I don't want to write migrations. The [SchemaSync](https://github.com/adamosoftware/SchemaSync) project powers my database diff/merge app [SQL Model Merge](https://aosoftware.net/Project/SqlModelMerge).
 
-To implement Postulate for a particular database, inherit from abstract class [CommandProvider&lt;TKey&gt;](https://github.com/adamosoftware/Postulate/blob/master/Postulate.Base/CommandProvider_Crud.cs) and implement its various abstract methods that generate SQL for Crud actions. The `TKey` generic argument specifies the identity (primary key) type used with your model classes. The [default MySQL implementation](https://github.com/adamosoftware/Postulate/blob/master/Postulate.MySql/MySqlProvider_Crud.cs) assumes an `int` primary key type. To implement `long` or `Guid` primary key types, you'd need to derive a new class from `CommandProvider` with your desired key type.
+- Inline SQL is more productive than Linq, but it needs to be isolated and testable with the [Query](https://github.com/adamosoftware/Postulate/wiki/Using-the-Query-class) class.
+
+## Getting Started
+Install the Nuget package for your platform:
+- [Postulate.SqlServer](https://www.nuget.org/packages/Postulate.SqlServer)
+- [Postulate.MySql](https://www.nuget.org/packages/Postulate.MySql)
+
+In the SQL Server package, there are three primary key types supported: `int`, `long`, and `Guid`. Import the appropriate namespace for the key type you want to use: `Postulate.SqlServer.IntKey`, `LongKey`, and `GuidKey` respectively. See [SQL Server CRUD Methods](https://github.com/adamosoftware/Postulate/wiki/SQL-Server-CRUD-Methods)
+
+The MySql package supports only `int` key types via namespace `Postulate.MySql.IntKey`. See [MySQL CRUD Methods](https://github.com/adamosoftware/Postulate/wiki/MySQL-CRUD-Methods)
+
+Both MySQL and SQL Server providers, as well as any new back-ends implemented should reference these [base CRUD methods](https://github.com/adamosoftware/Postulate/wiki/Crud-method-reference) and surface them as extension methods.

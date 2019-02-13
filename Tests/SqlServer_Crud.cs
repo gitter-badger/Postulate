@@ -8,7 +8,6 @@ using Postulate.SqlServer.IntKey;
 using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using Tests.Models;
 using Tests.Queries;
 
@@ -264,35 +263,46 @@ namespace Tests.SqlServer
 		}
 
 		[TestMethod]
-		public void PhraseQuerySqlWordsOnly()
+		public void EmployeeQueryEmptyWhere()
 		{
-			var qry = new PhraseQueryTest() { Search = "this that other" };
-
+			var qry = new EmployeeEmptyWhere();
 			using (var cn = GetConnection())
 			{
 				var results = qry.Execute(cn);
-				string sql = qry.ResolvedSql;
-				Assert.IsTrue(sql.Equals(@"SELECT * FROM [Employee] WHERE ([FirstName] LIKE '%' + @Search1 + '%' AND [FirstName] LIKE '%' + @Search2 + '%' AND [FirstName] LIKE '%' + @Search3 + '%') OR ([LastName] LIKE '%' + @Search1 + '%' AND [LastName] LIKE '%' + @Search2 + '%' AND [LastName] LIKE '%' + @Search3 + '%') OR ([Email] LIKE '%' + @Search1 + '%' AND [Email] LIKE '%' + @Search2 + '%' AND [Email] LIKE '%' + @Search3 + '%') OR ([Notes] LIKE '%' + @Search1 + '%' AND [Notes] LIKE '%' + @Search2 + '%' AND [Notes] LIKE '%' + @Search3 + '%')"));
-				Assert.IsTrue(qry.Parameters.ParameterNames.SequenceEqual(new string[] { "Search1", "Search2", "Search3" }));
-				Assert.IsTrue(qry.Parameters.Get<string>("Search1").Equals("this"));
-				Assert.IsTrue(qry.Parameters.Get<string>("Search2").Equals("that"));
-				Assert.IsTrue(qry.Parameters.Get<string>("Search3").Equals("other"));
+				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT * FROM [dbo].[Employee]  ORDER BY [LastName]"));
 			}
 		}
 
 		[TestMethod]
-		public void PhraseQueryQuoted()
+		public void EmployeeQueryEmptyWithLastName()
 		{
-			var qry = new PhraseQueryTest() { Search = "\"hello kitty\" yes" };
-
+			var qry = new EmployeeEmptyWhere() { LastName = "yodo" };
 			using (var cn = GetConnection())
 			{
 				var results = qry.Execute(cn);
-				string sql = qry.ResolvedSql;
-				Assert.IsTrue(sql.Equals(@"SELECT * FROM [Employee] WHERE ([FirstName] LIKE '%' + @Search1 + '%' AND [FirstName] LIKE '%' + @Search2 + '%') OR ([LastName] LIKE '%' + @Search1 + '%' AND [LastName] LIKE '%' + @Search2 + '%') OR ([Email] LIKE '%' + @Search1 + '%' AND [Email] LIKE '%' + @Search2 + '%') OR ([Notes] LIKE '%' + @Search1 + '%' AND [Notes] LIKE '%' + @Search2 + '%')"));
-				Assert.IsTrue(qry.Parameters.ParameterNames.SequenceEqual(new string[] { "Search1", "Search2" }));
-				Assert.IsTrue(qry.Parameters.Get<string>("Search1").Equals("hello kitty"));
-				Assert.IsTrue(qry.Parameters.Get<string>("Search2").Equals("yes"));
+				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT * FROM [dbo].[Employee] WHERE [LastName] LIKE @lastName ORDER BY [LastName]"));
+			}
+		}
+
+		[TestMethod]
+		public void EmployeeQueryAndWhereNoCriteria()
+		{
+			var qry = new EmployeesAndWhere();
+			using (var cn = GetConnection())
+			{
+				var results = qry.Execute(cn);
+				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT * FROM [dbo].[Employee] WHERE [IsActive]=1  ORDER BY [LastName]"));
+			}
+		}
+
+		[TestMethod]
+		public void EmployeeQueryAndWhereWithCriteria()
+		{
+			var qry = new EmployeesAndWhere() { LastName = "wonga" };
+			using (var cn = GetConnection())
+			{
+				var results = qry.Execute(cn);
+				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT * FROM [dbo].[Employee] WHERE [IsActive]=1 AND [LastName] LIKE @lastName ORDER BY [LastName]"));
 			}
 		}
 	}
