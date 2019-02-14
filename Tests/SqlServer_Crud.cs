@@ -305,6 +305,18 @@ namespace Tests.SqlServer
 				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT * FROM [dbo].[Employee] WHERE [IsActive]=1 AND [LastName] LIKE @lastName ORDER BY [LastName]"));
 			}
 		}
+
+		[TestMethod]
+		public void SaveInsertSetColumns()
+		{
+			SaveInsertSetColumnsBase();
+		}
+
+		[TestMethod]
+		public void SaveUpdateSetColumns()
+		{
+			SaveUpdateSetColumnsBase();
+		}
 	}
 
 	public class TestUser : IUser

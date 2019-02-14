@@ -29,9 +29,9 @@ namespace Postulate.MySql
 			return $"SELECT {string.Join(", ", columns.Select(col => ApplyDelimiter(col.ColumnName)))} FROM {ApplyDelimiter(GetTableName<T>(tableName))} WHERE {whereClause}";
 		}
 
-		protected override string InsertCommand<T>(string tableName = null)
+		protected override string InsertCommand<T>(string tableName = null, IEnumerable<string> propertyNames = null)
 		{
-			GetInsertComponents<T>(out string columnList, out string valueList);
+			GetInsertComponents<T>(out string columnList, out string valueList, propertyNames);
 			return $"INSERT INTO {ApplyDelimiter(GetTableName<T>(tableName))} ({columnList}) VALUES ({valueList}); SELECT LAST_INSERT_ID()";
 		}
 
@@ -42,9 +42,9 @@ namespace Postulate.MySql
 			return $"INSERT INTO {ApplyDelimiter(insertTable)} ({columnList}) VALUES ({valueList});";
 		}
 
-		protected override string UpdateCommand<T>(string tableName = null)
+		protected override string UpdateCommand<T>(string tableName = null, IEnumerable<string> propertyNames = null)
 		{
-			var columns = _integrator.GetEditableColumns(typeof(T), SaveAction.Update);
+			var columns = _integrator.GetEditableColumns(typeof(T), SaveAction.Update, propertyNames);
 			return $"UPDATE {ApplyDelimiter(GetTableName<T>(tableName))} SET {string.Join(", ", columns.Select(col => $"{ApplyDelimiter(col.ColumnName)}=@{col.PropertyName}"))} WHERE {ApplyDelimiter(typeof(T).GetIdentityName())}=@id";
 		}
 

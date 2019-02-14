@@ -438,6 +438,64 @@ namespace Tests
 			}
 		}
 
+		protected void SaveInsertSetColumnsBase()
+		{
+			var emp = new EmployeeInt()
+			{
+				OrganizationId = 1,
+				FirstName = "Todd",
+				LastName = "Bighead",
+				Email = "something@shouldnotbesaved.org" // we are testing to make sure that only specified columns are updated
+			};
+
+			var provider = GetIntProvider();
+			using (var cn = GetConnection())
+			{
+				// notice that Email is not in the update property list
+				int empId = provider.Save(cn, emp, 
+					nameof(EmployeeInt.OrganizationId),
+					nameof(EmployeeInt.FirstName),
+					nameof(EmployeeInt.LastName),
+					nameof(EmployeeInt.IsActive),
+					nameof(EmployeeInt.DateCreated));
+
+				emp = provider.Find<EmployeeInt>(cn, empId);
+				Assert.IsTrue(string.IsNullOrEmpty(emp.Email));
+			}			
+		}
+
+		protected void SaveUpdateSetColumnsBase()
+		{
+			var emp = new EmployeeInt()
+			{
+				OrganizationId = 1,
+				FirstName = "Todd",
+				LastName = "Bighead"
+			};
+
+			var provider = GetIntProvider();
+			using (var cn = GetConnection())
+			{
+				// this is an insert
+				int empId = provider.Save(cn, emp,
+					nameof(EmployeeInt.OrganizationId),
+					nameof(EmployeeInt.FirstName),
+					nameof(EmployeeInt.LastName),
+					nameof(EmployeeInt.IsActive),
+					nameof(EmployeeInt.DateCreated));
+
+				const string email = "newemail@nowhere.org";
+				emp = provider.Find<EmployeeInt>(cn, empId);
+
+				// update here
+				emp.Email = email;
+				provider.Save(cn, emp, nameof(EmployeeInt.Email));
+
+				emp = provider.Find<EmployeeInt>(cn, emp.Id);
+				Assert.IsTrue(emp.Email.Equals(email));
+			}
+		}
+
 		/// <summary>
 		/// Query EmployeeInt table with single param WHERE LastName LIKE @lastName
 		/// </summary>
