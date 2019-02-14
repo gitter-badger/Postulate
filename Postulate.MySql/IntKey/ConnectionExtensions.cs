@@ -68,9 +68,24 @@ namespace Postulate.MySql.IntKey
 			return GetProvider().Save(connection, @object, user, tableName);
 		}
 
+		public static int Save<TModel>(this IDbConnection connection, TModel @object, params string[] propertyNames)
+		{
+			return GetProvider().Save(connection, @object, propertyNames);
+		}
+
 		public async static Task<int> SaveAsync<TModel>(this IDbConnection connection, TModel @object, IUser user = null, string tableName = null)
 		{
 			return await GetProvider().SaveAsync(connection, @object, user, tableName);
+		}
+
+		public async static Task<int> SaveAsync<TModel>(this IDbConnection connection, TModel @object, params string[] propertyNames)
+		{
+			return await GetProvider().SaveAsync(connection, @object, propertyNames);
+		}
+
+		public static int Insert<TModel>(this IDbConnection connection, TModel @object, IUser user = null, string tableName = null)
+		{
+			return GetProvider().Insert(connection, @object, user, tableName);
 		}
 
 		public static void PlainInsert<TModel>(this IDbConnection connection, TModel @object, IUser user = null, string tableName = null)
@@ -81,11 +96,6 @@ namespace Postulate.MySql.IntKey
 		public static async Task PlainInsertAsync<TModel>(this IDbConnection connection, TModel @object, IUser user = null, string tableName = null)
 		{
 			await GetProvider().PlainInsertAsync(connection, @object, user, tableName);
-		}
-
-		public static int Insert<TModel>(this IDbConnection connection, TModel @object, IUser user = null, string tableName = null)
-		{
-			return GetProvider().Insert(connection, @object, user, tableName);
 		}
 
 		public async static Task<int> InsertAsync<TModel>(this IDbConnection connection, TModel @object, IUser user = null, string tableName = null)
