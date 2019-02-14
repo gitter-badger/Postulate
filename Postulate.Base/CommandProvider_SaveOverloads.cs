@@ -1,17 +1,64 @@
-﻿using Postulate.Base.Interfaces;
+﻿using Dapper;
+using Postulate.Base.Extensions;
+using Postulate.Base.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Postulate.Base
 {
 	public abstract partial class CommandProvider<TKey>
 	{
-		public async Task<TKey> SaveAsync<TModel>(IDbConnection connection, TModel @object, IUser user, params Expression<Func<TModel, object>>[] setColumns) where TModel : new()
+		private CommandDefinition BuildUpdateCommand<TModel>(TModel @object, IEnumerable<string> columnNames, string tableName = null)
 		{
-			if (IsNew(@object))
+			Type modelType = typeof(TModel);
+			DynamicParameters dp = new DynamicParameters();
+			string setColumns = string.Join(", ", columnNames.Select(col =>
+			{
+				PropertyInfo pi = modelType.GetProperty(col);
+				var value = pi.GetValue(@object);
+				dp.Add(col, value);
+				return $"{ApplyDelimiter(col)}=@{col}";
+			}));
+
+			return new CommandDefinition($"UPDATE {ApplyDelimiter(GetTableName(modelType, tableName))} SET {setColumns} WHERE {ApplyDelimiter(modelType.GetIdentityName())}=@id", dp);
+		}
+
+		public async Task<TKey> SaveAsync<TModel>(IDbConnection connection, TModel @object, IUser user, params string[] columnNames)
+		{
+			if (IsNew(@object) || columnNames == null)
+			{
+				return await SaveAsync(connection, @object, user);
+			}
+			else
+			{
+				var update = BuildUpdateCommand(@object, columnNames, null);
+				await connection.ExecuteAsync(update);
+				return GetIdentity(@object);
+			}
+		}
+
+		public TKey Save<TModel>(IDbConnection connection, TModel @object, IUser user, params string[] columnNames)
+		{
+			if (IsNew(@object) || columnNames == null)
+			{
+				return Save(connection, @object, user);
+			}
+			else
+			{
+				var update = BuildUpdateCommand(@object, columnNames, null);
+				connection.Execute(update);
+				return GetIdentity(@object);
+			}
+		}
+
+		public async Task<TKey> SaveAsync<TModel>(IDbConnection connection, TModel @object, IUser user, params Expression<Func<TModel, object>>[] setColumns)
+		{
+			if (IsNew(@object) || setColumns == null)
 			{
 				return await SaveAsync(connection, @object, user);
 			}
@@ -22,32 +69,17 @@ namespace Postulate.Base
 			}
 		}
 
-		/// <summary>
-		/// Inserts or creates TTarget from explicitly set properties in TSource and returns the inserted or updated id value
-		/// </summary>
-		public async Task<TKey> SaveAsync<TTarget, TSource>(IDbConnection connection, TKey identity, TSource source, Action<TTarget> mapping, IUser user = null, string tableName = null) where TTarget : new()
-		{
-			TTarget target = (identity.Equals(default(TKey))) ?
-				new TTarget() :
-				await FindAsync<TTarget>(connection, identity, user, tableName);
-
-			mapping.Invoke(target);
-
-			return await SaveAsync(connection, target, user, tableName);
-		}
-
-		/// <summary>
-		/// Inserts or creates TTarget from explicitly set properties in TSource and returns the inserted or updated id value
-		/// </summary>
-		public TKey Save<TTarget, TSource>(IDbConnection connection, TKey identity, TSource source, Action<TTarget> mapping, IUser user = null, string tableName = null) where TTarget : new()
-		{
-			TTarget target = (identity.Equals(default(TKey))) ?
-				new TTarget() :
-				Find<TTarget>(connection, identity, user, tableName);
-
-			mapping.Invoke(target);
-
-			return Save(connection, target, user, tableName);
+		public TKey Save<TModel>(IDbConnection connection, TModel @object, IUser user, params Expression<Func<TModel, object>>[] setColumns)
+		{ 
+			if (IsNew(@object) || setColumns == null)
+			{
+				return Save(connection, @object, user);
+			}
+			else
+			{
+				Update(connection, @object, user, setColumns);
+				return GetIdentity(@object);
+			}
 		}
 	}
 }
