@@ -35,3 +35,5 @@ In the SQL Server package, there are three primary key types supported: `int`, `
 The MySql package supports only `int` key types via namespace `Postulate.MySql.IntKey`. See [MySQL CRUD Methods](https://github.com/adamosoftware/Postulate/wiki/MySQL-CRUD-Methods)
 
 Both MySQL and SQL Server providers, as well as any new back-ends implemented should reference these [base CRUD methods](https://github.com/adamosoftware/Postulate/wiki/Crud-method-reference) and surface them as extension methods.
+
+Learn more at the [Wiki](https://github.com/adamosoftware/Postulate/wiki).
