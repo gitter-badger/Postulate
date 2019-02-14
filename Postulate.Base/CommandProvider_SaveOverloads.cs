@@ -1,11 +1,8 @@
 ﻿using Dapper;
-using Postulate.Base.Extensions;
-using Postulate.Base.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -13,73 +10,64 @@ namespace Postulate.Base
 {
 	public abstract partial class CommandProvider<TKey>
 	{
-		private CommandDefinition BuildUpdateCommand<TModel>(TModel @object, IEnumerable<string> columnNames, string tableName = null)
+		private CommandDefinition BuildUpdateCommand<TModel>(TModel @object, IEnumerable<string> propertyNames, string tableName = null)
 		{
-			Type modelType = typeof(TModel);
+			DynamicParameters dp = GetDynamicParameters(@object, propertyNames);
+			dp.Add("id", GetIdentity(@object));
+			return new CommandDefinition(UpdateCommand<TModel>(tableName, propertyNames), dp);
+		}
+
+		private CommandDefinition BuildInsertCommand<TModel>(TModel @object, IEnumerable<string> propertyNames, string tableName = null)
+		{
+			DynamicParameters dp = GetDynamicParameters(@object, propertyNames);
+			return new CommandDefinition(InsertCommand<TModel>(tableName, propertyNames), dp);
+		}
+
+		private static DynamicParameters GetDynamicParameters(object @object, IEnumerable<string> propertyNames)
+		{
+			Type modelType = @object.GetType();
 			DynamicParameters dp = new DynamicParameters();
-			string setColumns = string.Join(", ", columnNames.Select(col =>
+			propertyNames.ToList().ForEach((col) =>
 			{
 				PropertyInfo pi = modelType.GetProperty(col);
 				var value = pi.GetValue(@object);
 				dp.Add(col, value);
-				return $"{ApplyDelimiter(col)}=@{col}";
-			}));
-
-			return new CommandDefinition($"UPDATE {ApplyDelimiter(GetTableName(modelType, tableName))} SET {setColumns} WHERE {ApplyDelimiter(modelType.GetIdentityName())}=@id", dp);
+			});
+			return dp;
 		}
 
-		public async Task<TKey> SaveAsync<TModel>(IDbConnection connection, TModel @object, IUser user, params string[] columnNames)
+		public async Task<TKey> SaveAsync<TModel>(IDbConnection connection, TModel @object, params string[] propertyNames)
 		{
-			if (IsNew(@object) || columnNames == null)
+			if (IsNew(@object))
 			{
-				return await SaveAsync(connection, @object, user);
+				var cmd = BuildInsertCommand(@object, propertyNames);
+				object id = await connection.ExecuteScalarAsync(cmd);
+				SetIdentity(@object, ConvertIdentity(id));
 			}
 			else
 			{
-				var update = BuildUpdateCommand(@object, columnNames, null);
-				await connection.ExecuteAsync(update);
-				return GetIdentity(@object);
+				var cmd = BuildUpdateCommand(@object, propertyNames);
+				await connection.ExecuteScalarAsync(cmd);
 			}
+
+			return GetIdentity(@object);
 		}
 
-		public TKey Save<TModel>(IDbConnection connection, TModel @object, IUser user, params string[] columnNames)
+		public TKey Save<TModel>(IDbConnection connection, TModel @object, params string[] propertyNames)
 		{
-			if (IsNew(@object) || columnNames == null)
+			if (IsNew(@object))
 			{
-				return Save(connection, @object, user);
+				var cmd = BuildInsertCommand(@object, propertyNames);
+				object id = connection.ExecuteScalar(cmd);
+				SetIdentity(@object, ConvertIdentity(id));
 			}
 			else
 			{
-				var update = BuildUpdateCommand(@object, columnNames, null);
+				var update = BuildUpdateCommand(@object, propertyNames);
 				connection.Execute(update);
-				return GetIdentity(@object);
 			}
-		}
 
-		public async Task<TKey> SaveAsync<TModel>(IDbConnection connection, TModel @object, IUser user, params Expression<Func<TModel, object>>[] setColumns)
-		{
-			if (IsNew(@object) || setColumns == null)
-			{
-				return await SaveAsync(connection, @object, user);
-			}
-			else
-			{
-				await UpdateAsync(connection, @object, user, setColumns);
-				return GetIdentity(@object);
-			}
-		}
-
-		public TKey Save<TModel>(IDbConnection connection, TModel @object, IUser user, params Expression<Func<TModel, object>>[] setColumns)
-		{ 
-			if (IsNew(@object) || setColumns == null)
-			{
-				return Save(connection, @object, user);
-			}
-			else
-			{
-				Update(connection, @object, user, setColumns);
-				return GetIdentity(@object);
-			}
+			return GetIdentity(@object);
 		}
 	}
 }

@@ -46,7 +46,7 @@ namespace Postulate.Base
 		/// Generates a SQL insert statement for a given model class that returns a generated identity value
 		/// </summary>
 		/// <typeparam name="T">Model class type</typeparam>
-		protected abstract string InsertCommand<T>(string tableName = null);
+		protected abstract string InsertCommand<T>(string tableName = null, IEnumerable<string> propertyNames = null);
 
 		/// <summary>
 		/// Generates a SQL insert statement for a given model class without retrieving identity value
@@ -58,7 +58,7 @@ namespace Postulate.Base
 		/// Generates a SQL update statement for a given model class
 		/// </summary>
 		/// <typeparam name="T">Model class type</typeparam>
-		protected abstract string UpdateCommand<T>(string tableName = null);
+		protected abstract string UpdateCommand<T>(string tableName = null, IEnumerable<string> propertyNames = null);
 
 		/// <summary>
 		/// Generates a SQL delete statement for a given model class
@@ -749,9 +749,9 @@ namespace Postulate.Base
 			connection.Execute(cmd);
 		}
 
-		protected void GetInsertComponents<T>(out string columnList, out string valueList)
+		protected void GetInsertComponents<T>(out string columnList, out string valueList, IEnumerable<string> propertyNames = null)
 		{
-			var columns = _integrator.GetEditableColumns(typeof(T), SaveAction.Insert);
+			var columns = _integrator.GetEditableColumns(typeof(T), SaveAction.Insert, propertyNames);
 			columnList = string.Join(", ", columns.Select(c => ApplyDelimiter(c.ColumnName)));
 			valueList = string.Join(", ", columns.Select(c => $"@{c.PropertyName}"));
 		}

@@ -203,6 +203,18 @@ namespace Tests.MySql
 			EmployeeBeforeSaveAsyncShouldHaveTimestampBase().Wait();
 		}
 
+		[TestMethod]
+		public void SaveInsertSetColumns()
+		{
+			SaveInsertSetColumnsBase();
+		}
+
+		[TestMethod]
+		public void SaveUpdateSetColumns()
+		{
+			SaveUpdateSetColumnsBase();
+		}
+
 		protected override string GetEmployeeQueryByLastNameSyntax()
 		{
 			return "SELECT * FROM `Employee` WHERE `LastName` LIKE @lastName";

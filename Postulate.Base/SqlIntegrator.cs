@@ -100,11 +100,15 @@ namespace Postulate.Base
 		/// </summary>
 		/// <typeparam name="T">Model class type</typeparam>
 		/// <param name="action">Indicates whether an insert or update is in effect</param>
-		public IEnumerable<ColumnInfo> GetEditableColumns(Type modelType, SaveAction action)
+		public IEnumerable<ColumnInfo> GetEditableColumns(Type modelType, SaveAction action, IEnumerable<string> propertyNames = null)
 		{
 			bool hasIdentity = false;
 			string identity = modelType.TryGetIdentityName(string.Empty, ref hasIdentity).ToLower();
-			var props = modelType.GetProperties().Where(pi => !pi.GetColumnName().ToLower().Equals(identity)).ToArray();
+
+			Func<string, bool> columnFilter = (s) => { return true; };
+			if (propertyNames?.Any() ?? false) columnFilter = (s) => { return propertyNames.Contains(s); };
+			
+			var props = modelType.GetProperties().Where(pi => !pi.GetColumnName().ToLower().Equals(identity) && columnFilter.Invoke(pi.Name)).ToArray();
 			return props.Where(pi => IsEditable(pi, action)).Select(pi => new ColumnInfo(pi)).ToArray();
 		}
 
