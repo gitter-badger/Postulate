@@ -488,7 +488,7 @@ namespace Tests
 				emp = provider.Find<EmployeeInt>(cn, empId);
 
 				// update here
-				emp.Email = "newemail@nowhere.org";
+				emp.Email = email;
 				provider.Save(cn, emp, nameof(EmployeeInt.Email));
 
 				emp = provider.Find<EmployeeInt>(cn, emp.Id);
