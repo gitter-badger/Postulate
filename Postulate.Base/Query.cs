@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Postulate.Base.Attributes;
+using Postulate.Base.Exceptions;
 using Postulate.Base.Extensions;
 using System;
 using System.Collections.Generic;
@@ -26,25 +27,58 @@ namespace Postulate.Base
 		public IEnumerable<TResult> Execute(IDbConnection connection)
 		{
 			ResolvedSql = ResolveQuery(this, out DynamicParameters queryParams);
-			return connection.Query<TResult>(ResolvedSql, queryParams);
+			
+			try
+			{
+				return connection.Query<TResult>(ResolvedSql, queryParams);
+			}
+			catch (Exception exc)
+			{
+				throw new QueryException(exc, ResolvedSql, queryParams);
+			}			
 		}
 
 		public TResult ExecuteSingle(IDbConnection connection)
 		{
 			ResolvedSql = ResolveQuery(this, out DynamicParameters queryParams);
-			return connection.QuerySingle<TResult>(ResolvedSql, queryParams);
+
+			try
+			{
+				return connection.QuerySingle<TResult>(ResolvedSql, queryParams);
+			}
+			catch (Exception exc)
+			{
+				throw new QueryException(exc, ResolvedSql, queryParams);
+			}
+			
 		}
 
 		public async Task<TResult> ExecuteSingleAsync(IDbConnection connection)
 		{
 			ResolvedSql = ResolveQuery(this, out DynamicParameters queryParams);
-			return await connection.QuerySingleAsync<TResult>(ResolvedSql, queryParams);
+
+			try
+			{
+				return await connection.QuerySingleAsync<TResult>(ResolvedSql, queryParams);
+			}
+			catch (Exception exc)
+			{
+				throw new QueryException(exc, ResolvedSql, queryParams);
+			}			
 		}
 
 		public async Task<IEnumerable<TResult>> ExecuteAsync(IDbConnection connection)
 		{
 			ResolvedSql = ResolveQuery(this, out DynamicParameters queryParams);
-			return await connection.QueryAsync<TResult>(ResolvedSql, queryParams);
+
+			try
+			{
+				return await connection.QueryAsync<TResult>(ResolvedSql, queryParams);
+			}
+			catch (Exception exc)
+			{
+				throw new QueryException(exc, ResolvedSql, queryParams);
+			}			
 		}
 
 		private static string ResolveQuery(Query<TResult> query, out DynamicParameters queryParams)
