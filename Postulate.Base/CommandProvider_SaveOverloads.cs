@@ -10,32 +10,6 @@ namespace Postulate.Base
 {
 	public abstract partial class CommandProvider<TKey>
 	{
-		private CommandDefinition BuildUpdateCommand<TModel>(TModel @object, IEnumerable<string> propertyNames, string tableName = null)
-		{
-			DynamicParameters dp = GetDynamicParameters(@object, propertyNames);
-			dp.Add("id", GetIdentity(@object));
-			return new CommandDefinition(UpdateCommand<TModel>(tableName, propertyNames), dp);
-		}
-
-		private CommandDefinition BuildInsertCommand<TModel>(TModel @object, IEnumerable<string> propertyNames, string tableName = null)
-		{
-			DynamicParameters dp = GetDynamicParameters(@object, propertyNames);
-			return new CommandDefinition(InsertCommand<TModel>(tableName, propertyNames), dp);
-		}
-
-		private static DynamicParameters GetDynamicParameters(object @object, IEnumerable<string> propertyNames)
-		{
-			Type modelType = @object.GetType();
-			DynamicParameters dp = new DynamicParameters();
-			propertyNames.ToList().ForEach((col) =>
-			{
-				PropertyInfo pi = modelType.GetProperty(col);
-				var value = pi.GetValue(@object);
-				dp.Add(col, value);
-			});
-			return dp;
-		}
-
 		/// <summary>
 		/// Inserts or updates a record, setting only the given propertyNames
 		/// </summary>
@@ -74,6 +48,32 @@ namespace Postulate.Base
 			}
 
 			return GetIdentity(@object);
+		}
+
+		private CommandDefinition BuildUpdateCommand<TModel>(TModel @object, IEnumerable<string> propertyNames, string tableName = null)
+		{
+			DynamicParameters dp = GetDynamicParameters(@object, propertyNames);
+			dp.Add("id", GetIdentity(@object));
+			return new CommandDefinition(UpdateCommand<TModel>(tableName, propertyNames), dp);
+		}
+
+		private CommandDefinition BuildInsertCommand<TModel>(TModel @object, IEnumerable<string> propertyNames, string tableName = null)
+		{
+			DynamicParameters dp = GetDynamicParameters(@object, propertyNames);
+			return new CommandDefinition(InsertCommand<TModel>(tableName, propertyNames), dp);
+		}
+
+		private static DynamicParameters GetDynamicParameters(object @object, IEnumerable<string> propertyNames)
+		{
+			Type modelType = @object.GetType();
+			DynamicParameters dp = new DynamicParameters();
+			propertyNames.ToList().ForEach((col) =>
+			{
+				PropertyInfo pi = modelType.GetProperty(col);
+				var value = pi.GetValue(@object);
+				dp.Add(col, value);
+			});
+			return dp;
 		}
 	}
 }
