@@ -36,6 +36,9 @@ namespace Postulate.Base
 			return dp;
 		}
 
+		/// <summary>
+		/// Inserts or updates a record, setting only the given propertyNames
+		/// </summary>
 		public async Task<TKey> SaveAsync<TModel>(IDbConnection connection, TModel @object, params string[] propertyNames)
 		{
 			if (IsNew(@object))
@@ -53,6 +56,9 @@ namespace Postulate.Base
 			return GetIdentity(@object);
 		}
 
+		/// <summary>
+		/// Inserts or updates a record, setting only the given propertyNames
+		/// </summary>
 		public TKey Save<TModel>(IDbConnection connection, TModel @object, params string[] propertyNames)
 		{
 			if (IsNew(@object))
