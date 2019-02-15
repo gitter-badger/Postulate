@@ -10,6 +10,7 @@
     <Copyright>Copyright (c) Adam O'Neil 2019</Copyright>
     <Description>Postulate ORM implementation for SQL Server</Description>
     <PackageLicenseUrl>https://github.com/adamosoftware/Postulate/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://postulate-orm.io</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

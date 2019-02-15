@@ -10,6 +10,7 @@
     <PackageLicenseUrl>https://github.com/adamosoftware/Postulate/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>codefirst orm dapper mysql</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://postulate-orm.io</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
