@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Postulate.Base.Attributes;
+using Postulate.Base.Classes;
 using Postulate.Base.Extensions;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace Postulate.Base
 			foreach (var prop in queryProps)
 			{
 				var value = prop.GetValue(parameters);
-				if (value != null) queryParams.Add(prop.Name, value);
+				if (value != null && !prop.HasAttribute<PhraseAttribute>()) queryParams.Add(prop.Name, value);
 			}
 
 			var whereBuilder = GetWhereTokens();
@@ -57,7 +58,20 @@ namespace Postulate.Base
 							else
 							{
 								WhereAttribute whereAttr = pi.GetAttribute<WhereAttribute>();
-								if (whereAttr != null) terms.Add(whereAttr.Expression);
+								if (whereAttr != null)
+								{
+									terms.Add(whereAttr.Expression);
+								}
+								else
+								{
+									PhraseAttribute phraseAttr = pi.GetAttribute<PhraseAttribute>();
+									if (phraseAttr != null)
+									{
+										var phraseQuery = new PhraseQuery(pi.Name, value.ToString(), phraseAttr.ColumnNames, phraseAttr.LeadingColumnDelimiter, phraseAttr.EndingColumnDelimiter);
+										queryParams.AddDynamicParams(phraseQuery.Parameters);
+										terms.Add(phraseQuery.Expression);
+									}
+								}
 							}
 						}
 					}
@@ -125,6 +139,7 @@ namespace Postulate.Base
 			var queryProps = query.GetType().GetProperties().Where(pi =>
 				pi.HasAttribute<WhereAttribute>() ||
 				pi.HasAttribute<CaseAttribute>() ||
+				pi.HasAttribute<PhraseAttribute>() ||
 				builtInParamsArray.Contains(pi.Name.ToLower()));
 
 			return queryProps;

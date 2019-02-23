@@ -23,10 +23,12 @@ namespace Postulate.Base
 
 		public string Sql { get; private set; }
 		public string ResolvedSql { get; private set; }
+		public DynamicParameters Parameters { get; private set; }
 
 		public IEnumerable<TResult> Execute(IDbConnection connection)
 		{
 			ResolvedSql = QueryUtil.ResolveSql(Sql, this, out DynamicParameters queryParams);
+			Parameters = queryParams;
 
 			try
 			{
@@ -41,6 +43,7 @@ namespace Postulate.Base
 		public TResult ExecuteSingle(IDbConnection connection)
 		{
 			ResolvedSql = QueryUtil.ResolveSql(Sql, this, out DynamicParameters queryParams);
+			Parameters = queryParams;
 
 			try
 			{
@@ -55,6 +58,7 @@ namespace Postulate.Base
 		public async Task<TResult> ExecuteSingleAsync(IDbConnection connection)
 		{
 			ResolvedSql = QueryUtil.ResolveSql(Sql, this, out DynamicParameters queryParams);
+			Parameters = queryParams;
 
 			try
 			{
@@ -69,6 +73,7 @@ namespace Postulate.Base
 		public async Task<IEnumerable<TResult>> ExecuteAsync(IDbConnection connection)
 		{
 			ResolvedSql = QueryUtil.ResolveSql(Sql, this, out DynamicParameters queryParams);
+			Parameters = queryParams;
 
 			try
 			{
@@ -79,7 +84,6 @@ namespace Postulate.Base
 				throw new QueryException(exc, ResolvedSql, queryParams);
 			}			
 		}
-
 
 		/// <summary>
 		/// Intended for implementing <see cref="Interfaces.ITestableQuery"/> for unit testing, not intended for use on its own

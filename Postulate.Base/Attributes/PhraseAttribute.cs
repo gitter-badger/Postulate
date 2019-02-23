@@ -11,5 +11,8 @@ namespace Postulate.Base.Attributes
 		}
 
 		public string[] ColumnNames { get; }
+
+		public char LeadingColumnDelimiter { get; set; } = '[';
+		public char EndingColumnDelimiter { get; set; } = ']';
 	}
 }
