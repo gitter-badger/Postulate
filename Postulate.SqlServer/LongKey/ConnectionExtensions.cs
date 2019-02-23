@@ -13,12 +13,12 @@ namespace Postulate.SqlServer.LongKey
 			return new SqlServerProvider<long>((obj) => Convert.ToInt64(obj), "identity(1,1)");
 		}
 
-		public static bool Exists<TModel>(this IDbConnection connection, long id, IUser user = null, string tableName = null)
+		public static bool Exists<TModel>(this IDbConnection connection, int id, IUser user = null, string tableName = null)
 		{
 			return GetProvider().Exists<TModel>(connection, id, user, tableName);
 		}
 
-		public async static Task<bool> ExistsAsync<TModel>(this IDbConnection connection, long id, IUser user = null, string tableName = null)
+		public async static Task<bool> ExistsAsync<TModel>(this IDbConnection connection, int id, IUser user = null, string tableName = null)
 		{
 			return await GetProvider().ExistsAsync<TModel>(connection, id, user, tableName);
 		}
@@ -33,12 +33,12 @@ namespace Postulate.SqlServer.LongKey
 			return await GetProvider().ExistsWhereAsync<TModel>(connection, criteria, user, tableName);
 		}
 
-		public static TModel Find<TModel>(this IDbConnection connection, long id, IUser user = null, string tableName = null)
+		public static TModel Find<TModel>(this IDbConnection connection, int id, IUser user = null, string tableName = null)
 		{
 			return GetProvider().Find<TModel>(connection, id, user, tableName);
 		}
 
-		public async static Task<TModel> FindAsync<TModel>(this IDbConnection connection, long id, IUser user = null, string tableName = null)
+		public async static Task<TModel> FindAsync<TModel>(this IDbConnection connection, int id, IUser user = null, string tableName = null)
 		{
 			return await GetProvider().FindAsync<TModel>(connection, id, user, tableName);
 		}
@@ -68,9 +68,19 @@ namespace Postulate.SqlServer.LongKey
 			return GetProvider().Save(connection, @object, user, tableName);
 		}
 
+		public static long Save<TModel>(this IDbConnection connection, TModel @object, params string[] propertyNames)
+		{
+			return GetProvider().Save(connection, @object, propertyNames);
+		}
+
 		public async static Task<long> SaveAsync<TModel>(this IDbConnection connection, TModel @object, IUser user = null, string tableName = null)
 		{
 			return await GetProvider().SaveAsync(connection, @object, user, tableName);
+		}
+
+		public async static Task<long> SaveAsync<TModel>(this IDbConnection connection, TModel @object, params string[] propertyNames)
+		{
+			return await GetProvider().SaveAsync(connection, @object, propertyNames);
 		}
 
 		public static long Insert<TModel>(this IDbConnection connection, TModel @object, IUser user = null, string tableName = null)
@@ -113,12 +123,12 @@ namespace Postulate.SqlServer.LongKey
 			await GetProvider().UpdateAsync(connection, @object, user, setColumns);
 		}
 
-		public static void Delete<TModel>(this IDbConnection connection, long id, IUser user = null, string tableName = null)
+		public static void Delete<TModel>(this IDbConnection connection, int id, IUser user = null, string tableName = null)
 		{
 			GetProvider().Delete<TModel>(connection, id, user, tableName);
 		}
 
-		public async static Task DeleteAsync<TModel>(this IDbConnection connection, long id, IUser user = null, string tableName = null)
+		public async static Task DeleteAsync<TModel>(this IDbConnection connection, int id, IUser user = null, string tableName = null)
 		{
 			await GetProvider().DeleteAsync<TModel>(connection, id, user, tableName);
 		}

@@ -68,9 +68,19 @@ namespace Postulate.SqlServer.IntKey
 			return GetProvider().Save(connection, @object, user, tableName);
 		}
 
+		public static int Save<TModel>(this IDbConnection connection, TModel @object, params string[] propertyNames)
+		{
+			return GetProvider().Save(connection, @object, propertyNames);
+		}
+
 		public async static Task<int> SaveAsync<TModel>(this IDbConnection connection, TModel @object, IUser user = null, string tableName = null)
 		{
 			return await GetProvider().SaveAsync(connection, @object, user, tableName);
+		}
+
+		public async static Task<int> SaveAsync<TModel>(this IDbConnection connection, TModel @object, params string[] propertyNames)
+		{
+			return await GetProvider().SaveAsync(connection, @object, propertyNames);
 		}
 
 		public static int Insert<TModel>(this IDbConnection connection, TModel @object, IUser user = null, string tableName = null)
