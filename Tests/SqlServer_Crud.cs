@@ -351,6 +351,22 @@ namespace Tests.SqlServer
 				Assert.IsTrue(qry.Parameters.Get<string>("Search2").Equals("yes"));
 			}
 		}
+
+		[TestMethod]
+		public void PhraseQueryNegated()
+		{
+			var qry = new PhraseQueryTest() { Search = "\"hello kitty\" -yes" };
+
+			using (var cn = GetConnection())
+			{
+				var results = qry.Execute(cn);
+				string sql = qry.ResolvedSql;
+				Assert.IsTrue(sql.Equals(@"SELECT * FROM [Employee] WHERE ([FirstName] LIKE '%' + @Search1 + '%' AND [FirstName] NOT LIKE '%' + @Search2 + '%') OR ([LastName] LIKE '%' + @Search1 + '%' AND [LastName] NOT LIKE '%' + @Search2 + '%') OR ([Email] LIKE '%' + @Search1 + '%' AND [Email] NOT LIKE '%' + @Search2 + '%') OR ([Notes] LIKE '%' + @Search1 + '%' AND [Notes] NOT LIKE '%' + @Search2 + '%')"));
+				Assert.IsTrue(qry.Parameters.ParameterNames.SequenceEqual(new string[] { "Search1", "Search2" }));
+				Assert.IsTrue(qry.Parameters.Get<string>("Search1").Equals("hello kitty"));
+				Assert.IsTrue(qry.Parameters.Get<string>("Search2").Equals("yes"));
+			}
+		}
 	}
 
 	public class TestUser : IUser
