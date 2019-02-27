@@ -1,12 +1,8 @@
 ﻿using Dapper;
-using Postulate.Base.Attributes;
 using Postulate.Base.Exceptions;
-using Postulate.Base.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Postulate.Base
@@ -25,6 +21,20 @@ namespace Postulate.Base
 		public string ResolvedSql { get; private set; }
 		public DynamicParameters Parameters { get; private set; }
 
+		public string ResolveSql()
+		{			
+			ResolvedSql = QueryUtil.ResolveSql(Sql, this, out DynamicParameters queryParams);
+			Parameters = queryParams;
+			return ResolvedSql;
+		}
+
+		public string ResolveSql(out DynamicParameters queryParams)
+		{
+			ResolvedSql = QueryUtil.ResolveSql(Sql, this, out queryParams);
+			Parameters = queryParams;
+			return ResolvedSql;
+		}
+
 		public IEnumerable<TResult> Execute(IDbConnection connection)
 		{
 			ResolvedSql = QueryUtil.ResolveSql(Sql, this, out DynamicParameters queryParams);
@@ -37,7 +47,7 @@ namespace Postulate.Base
 			catch (Exception exc)
 			{
 				throw new QueryException(exc, ResolvedSql, queryParams);
-			}			
+			}
 		}
 
 		public TResult ExecuteSingle(IDbConnection connection)
@@ -52,7 +62,7 @@ namespace Postulate.Base
 			catch (Exception exc)
 			{
 				throw new QueryException(exc, ResolvedSql, queryParams);
-			}			
+			}
 		}
 
 		public async Task<TResult> ExecuteSingleAsync(IDbConnection connection)
@@ -67,7 +77,7 @@ namespace Postulate.Base
 			catch (Exception exc)
 			{
 				throw new QueryException(exc, ResolvedSql, queryParams);
-			}			
+			}
 		}
 
 		public async Task<IEnumerable<TResult>> ExecuteAsync(IDbConnection connection)
@@ -82,7 +92,7 @@ namespace Postulate.Base
 			catch (Exception exc)
 			{
 				throw new QueryException(exc, ResolvedSql, queryParams);
-			}			
+			}
 		}
 
 		/// <summary>
