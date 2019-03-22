@@ -26,7 +26,7 @@ namespace Postulate.Base.Classes
 				expressions.Add(ParamExpression(qt.IsNegated, paramName));
 			});
 			
-			Expression = string.Join(" OR ", columnNames.Select(col => $"({string.Join(" AND ", expressions.Select(expr => $"{leadingColumnDelimiter}{col}{endingColumnDelimiter} {expr}"))})"));
+			Expression = "(" + string.Join(" OR ", columnNames.Select(col => $"({string.Join(" AND ", expressions.Select(expr => $"{leadingColumnDelimiter}{col}{endingColumnDelimiter} {expr}"))})")) + ")";
 		}
 
 		private static string ParamExpression(bool isNegated, string paramName)
