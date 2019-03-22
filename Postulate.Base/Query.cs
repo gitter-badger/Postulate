@@ -1,8 +1,10 @@
 ﻿using Dapper;
+using Postulate.Base.Classes;
 using Postulate.Base.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Postulate.Base
@@ -20,6 +22,21 @@ namespace Postulate.Base
 		public string Sql { get; private set; }
 		public string ResolvedSql { get; private set; }
 		public DynamicParameters Parameters { get; private set; }
+	
+		/// <summary>
+		/// Override this to capture information about a query execution in your application
+		/// </summary>		
+		protected virtual void OnQueryExecuted(QueryTrace queryTrace)
+		{			
+		}
+
+		/// <summary>
+		/// Override this to capture information about a query execution in your application
+		/// </summary>
+		protected virtual async Task OnQueryExecutedAsync(QueryTrace queryTrace)
+		{
+			await Task.CompletedTask;
+		}
 
 		public string ResolveSql()
 		{			
@@ -40,6 +57,7 @@ namespace Postulate.Base
 			ResolvedSql = QueryUtil.ResolveSql(Sql, this, out DynamicParameters queryParams);
 			Parameters = queryParams;
 
+			var stopwatch = Stopwatch.StartNew();
 			try
 			{
 				return connection.Query<TResult>(ResolvedSql, queryParams);
@@ -48,6 +66,11 @@ namespace Postulate.Base
 			{
 				throw new QueryException(exc, ResolvedSql, queryParams);
 			}
+			finally
+			{
+				stopwatch.Stop();
+				OnQueryExecuted(new QueryTrace(ResolvedSql, queryParams, stopwatch.Elapsed));
+			}
 		}
 
 		public TResult ExecuteSingle(IDbConnection connection)
@@ -55,6 +78,7 @@ namespace Postulate.Base
 			ResolvedSql = QueryUtil.ResolveSql(Sql, this, out DynamicParameters queryParams);
 			Parameters = queryParams;
 
+			var stopwatch = Stopwatch.StartNew();
 			try
 			{
 				return connection.QuerySingle<TResult>(ResolvedSql, queryParams);
@@ -63,6 +87,11 @@ namespace Postulate.Base
 			{
 				throw new QueryException(exc, ResolvedSql, queryParams);
 			}
+			finally
+			{
+				stopwatch.Stop();
+				OnQueryExecuted(new QueryTrace(ResolvedSql, queryParams, stopwatch.Elapsed));
+			}
 		}
 
 		public async Task<TResult> ExecuteSingleAsync(IDbConnection connection)
@@ -70,6 +99,7 @@ namespace Postulate.Base
 			ResolvedSql = QueryUtil.ResolveSql(Sql, this, out DynamicParameters queryParams);
 			Parameters = queryParams;
 
+			var stopwatch = Stopwatch.StartNew();
 			try
 			{
 				return await connection.QuerySingleAsync<TResult>(ResolvedSql, queryParams);
@@ -78,6 +108,13 @@ namespace Postulate.Base
 			{
 				throw new QueryException(exc, ResolvedSql, queryParams);
 			}
+			finally
+			{
+				stopwatch.Stop();
+				var qt = new QueryTrace(ResolvedSql, queryParams, stopwatch.Elapsed);
+				OnQueryExecuted(qt);
+				await OnQueryExecutedAsync(qt);
+			}
 		}
 
 		public async Task<IEnumerable<TResult>> ExecuteAsync(IDbConnection connection)
@@ -85,6 +122,7 @@ namespace Postulate.Base
 			ResolvedSql = QueryUtil.ResolveSql(Sql, this, out DynamicParameters queryParams);
 			Parameters = queryParams;
 
+			var stopwatch = Stopwatch.StartNew();
 			try
 			{
 				return await connection.QueryAsync<TResult>(ResolvedSql, queryParams);
@@ -92,6 +130,13 @@ namespace Postulate.Base
 			catch (Exception exc)
 			{
 				throw new QueryException(exc, ResolvedSql, queryParams);
+			}
+			finally
+			{
+				stopwatch.Stop();
+				var qt = new QueryTrace(ResolvedSql, queryParams, stopwatch.Elapsed);
+				OnQueryExecuted(qt);
+				await OnQueryExecutedAsync(qt);
 			}
 		}
 
