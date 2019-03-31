@@ -122,6 +122,7 @@ namespace Postulate.Base
 
 		private bool IsEditable(PropertyInfo propertyInfo, SaveAction action)
 		{
+			if (propertyInfo.DeclaringType.IsInterface) return true;
 			if (!propertyInfo.CanWrite) return false;
 			if (!IsSupportedType(propertyInfo.PropertyType)) return false;
 			if (!IsMapped(propertyInfo)) return false;
