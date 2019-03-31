@@ -18,7 +18,7 @@ namespace Postulate.Base
 		/// <summary>
 		/// Override this to execute logic after a record is successfully saved
 		/// </summary>
-		public virtual Task AfterSaveAsync(IDbConnection connection, SaveAction action)
+		public virtual Task AfterSaveAsync(IDbConnection connection, SaveAction action, IUser user)
 		{
 			// do nothing by default
 			return Task.CompletedTask;

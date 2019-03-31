@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.3.13</Version>
+    <Version>1.3.14</Version>
     <Authors>Adam O'Neil</Authors>
     <RepositoryUrl>https://github.com/adamosoftware/Postulate</RepositoryUrl>
     <PackageTags>codefirst orm dapper</PackageTags>
@@ -10,9 +10,9 @@
     <PackageLicenseUrl>https://github.com/adamosoftware/Postulate/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Copyright (c) Adam O'Neil 2019</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.3.13.0</AssemblyVersion>
+    <AssemblyVersion>1.3.14.0</AssemblyVersion>
     <PackageProjectUrl>https://postulate-orm.io</PackageProjectUrl>
-    <PackageReleaseNotes>For SQL generation purposes, interface properties are assumed to be writeable even without a set accessor</PackageReleaseNotes>    
+    <PackageReleaseNotes>Addresses issue #15, added IUser arg to AfterSave virtuals</PackageReleaseNotes>    
   </PropertyGroup>
   
   <ItemGroup>      

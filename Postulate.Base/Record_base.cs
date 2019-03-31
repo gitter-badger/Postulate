@@ -92,7 +92,7 @@ namespace Postulate.Base
 		/// <summary>
 		/// Override this to execute logic after a record is successfully saved
 		/// </summary>
-		public virtual void AfterSave(IDbConnection connection, SaveAction action)
+		public virtual void AfterSave(IDbConnection connection, SaveAction action, IUser user)
 		{
 			// do nothing by default
 		}

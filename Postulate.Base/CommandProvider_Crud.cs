@@ -162,7 +162,7 @@ namespace Postulate.Base
 
 			SetIdentity(@object, result);
 
-			record?.AfterSave(connection, SaveAction.Insert);
+			record?.AfterSave(connection, SaveAction.Insert, user);
 
 			return result;
 		}
@@ -190,7 +190,7 @@ namespace Postulate.Base
 				throw new CrudException(SaveAction.Insert, exc, cmd, @object);
 			}
 
-			record?.AfterSave(connection, SaveAction.Insert);
+			record?.AfterSave(connection, SaveAction.Insert, user);
 		}
 
 		/// <summary>
@@ -218,11 +218,11 @@ namespace Postulate.Base
 			}
 
 			SetIdentity(@object, result);
-			record?.AfterSave(connection, SaveAction.Insert);
+			record?.AfterSave(connection, SaveAction.Insert, user);
 
 			if (record != null)
 			{
-				await record.AfterSaveAsync(connection, SaveAction.Insert);
+				await record.AfterSaveAsync(connection, SaveAction.Insert, user);
 			}
 			
 			return result;
@@ -251,7 +251,7 @@ namespace Postulate.Base
 				throw new CrudException(SaveAction.Insert, exc, cmd, @object);
 			}
 
-			record?.AfterSave(connection, SaveAction.Insert);
+			record?.AfterSave(connection, SaveAction.Insert, user);
 		}
 
 		private async Task<Record> PreSaveAsync<TModel>(IDbConnection connection, TModel @object, IUser user, SaveAction action)
@@ -394,7 +394,7 @@ namespace Postulate.Base
 				throw new CrudException(SaveAction.Update, exc, cmd, @object);
 			}
 
-			record?.AfterSave(connection, SaveAction.Update);
+			record?.AfterSave(connection, SaveAction.Update, user);
 		}
 
 		/// <summary>
@@ -422,11 +422,11 @@ namespace Postulate.Base
 				throw new CrudException(SaveAction.Update, exc, cmd, @object);
 			}
 
-			record?.AfterSave(connection, SaveAction.Update);
+			record?.AfterSave(connection, SaveAction.Update, user);
 
 			if (record != null)
 			{
-				await record.AfterSaveAsync(connection, SaveAction.Update);
+				await record.AfterSaveAsync(connection, SaveAction.Update, user);
 			}			
 		}
 
