@@ -81,6 +81,8 @@ namespace Postulate.Base
 			}
 
 			trackedRecord?.TrackChanges(connection, version, changes, user);
+
+			await trackedRecord?.TrackChangesAsync(connection, version, changes, user);
 		}
 
 		private void SaveChanges<TModel>(IDbConnection connection, TModel @object, IEnumerable<PropertyChange> changes, IUser user)
