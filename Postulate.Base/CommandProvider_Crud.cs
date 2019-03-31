@@ -263,6 +263,9 @@ namespace Postulate.Base
 				bool valid = await record.ValidateAsync(connection);
 				if (!valid) throw new ValidationException(record.ValidateAsyncMessage);
 
+				string message = null;
+				if (!record?.Validate(connection, out message) ?? false) throw new ValidationException(message);
+
 				if (user != null)
 				{
 					bool permission = await record.CheckFindPermissionAsync(connection, user);

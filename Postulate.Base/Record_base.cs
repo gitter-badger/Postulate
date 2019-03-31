@@ -24,7 +24,7 @@ namespace Postulate.Base
 		/// Set by ValidateAsync to the message associated with a failing validation
 		/// </summary>
 		[NotMapped]
-		public string ValidateAsyncMessage { get; private set; }
+		public string ValidateAsyncMessage { get; protected set; }
 
 		/// <summary>
 		/// Override this to verify the current user has permission to perform requested action
