@@ -9,6 +9,7 @@ namespace Postulate.Base.Extensions
 		internal const string OrderByToken = "{orderBy}";
 		internal const string WhereToken = "{where}";
 		internal const string AndWhereToken = "{andWhere}";
+		internal const string JoinToken = "{join}";
 		internal const string SqlParamRegex = "@([a-zA-Z][a-zA-Z0-9_]*)";
 
 		/// <summary>

@@ -2,9 +2,11 @@
 using Postulate.Base.Attributes;
 using Postulate.Base.Classes;
 using Postulate.Base.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Postulate.Base
 {
@@ -80,7 +82,27 @@ namespace Postulate.Base
 				result = ResolveWhereToken(token, result, terms);
 			}
 
+			if (HasJoinToken(result)) result = ResolveJoins(result, parameters);
+
+			// remove any leftover tokens (i.e. {orderBy}, {join} etc)
+			var matches = Regex.Matches(result, "(?<!{)({[^{\r\n]*})(?!{)");
+			foreach (Match match in matches) result = result.Replace(match.Value, string.Empty);
+
 			return result;
+		}
+
+		private static string ResolveJoins(string sql, object parameters)
+		{
+			var joinTerms = parameters.GetType().GetProperties()
+				.Where(pi => pi.HasAttribute<JoinAttribute>() && pi.GetValue(parameters).Equals(true))
+				.Select(pi => pi.GetAttribute<JoinAttribute>().Sql);
+
+			return sql.Replace(InternalStringExtensions.JoinToken, string.Join("\r\n", joinTerms));
+		}
+
+		private static bool HasJoinToken(string sql)
+		{
+			return sql.Contains(InternalStringExtensions.JoinToken);
 		}
 
 		public static bool FindWhereToken(string sql, out string token)
@@ -100,7 +122,7 @@ namespace Postulate.Base
 			return new Dictionary<string, string>()
 			{
 				{ InternalStringExtensions.WhereToken, "WHERE" }, // query has no WHERE clause, so it will be added
-				{ InternalStringExtensions.AndWhereToken, "AND" } // query already contains a WHERE clause, we're just adding to it
+				{ InternalStringExtensions.AndWhereToken, "AND" } // query already contains a WHERE clause, we're just adding to it				
 			};
 		}
 
