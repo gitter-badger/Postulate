@@ -27,6 +27,8 @@ namespace Postulate.Base
 
 			string result = sql;
 
+			if (HasJoinToken(result)) result = ResolveJoins(result, parameters);
+
 			List<string> terms = new List<string>();
 			var queryProps = GetProperties(parameters, result, out IEnumerable<string> builtInParams);
 
@@ -80,9 +82,7 @@ namespace Postulate.Base
 				}
 
 				result = ResolveWhereToken(token, result, terms);
-			}
-
-			if (HasJoinToken(result)) result = ResolveJoins(result, parameters);
+			}			
 
 			// remove any leftover tokens (i.e. {orderBy}, {join} etc)
 			var matches = Regex.Matches(result, "(?<!{)({[^{\r\n]*})(?!{)");
