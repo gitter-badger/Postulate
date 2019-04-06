@@ -6,14 +6,17 @@ namespace Tests.Queries
 {
 	public class EmployeeEmptyWhere : Query<EmployeeInt>
 	{
-		public EmployeeEmptyWhere() : base("SELECT * FROM [dbo].[Employee] {where} ORDER BY [LastName]")
+		public EmployeeEmptyWhere() : base("SELECT [e].* FROM [dbo].[Employee] [e] {join} {where} ORDER BY [e].[LastName]")
 		{
 		}
 
 		[Case(true, "[IsActive]=1")]
-		public bool ActiveOnly { get; set; }		
+		public bool ActiveOnly { get; set; }
 
 		[Where("[LastName] LIKE @lastName")]
 		public string LastName { get; set; }
+
+		[Join("INNER JOIN [dbo].[Organization] [org] ON [e].[OrganizationId]=[org].[Id]")]
+		public bool WithOrgs { get; set; }
 	}
 }

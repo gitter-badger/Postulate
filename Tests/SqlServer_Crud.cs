@@ -270,8 +270,19 @@ namespace Tests.SqlServer
 			using (var cn = GetConnection())
 			{
 				var results = qry.Execute(cn);
-				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT * FROM [dbo].[Employee]  ORDER BY [LastName]"));
+				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT [e].* FROM [dbo].[Employee] [e]   ORDER BY [e].[LastName]"));
 			}
+		}
+
+		[TestMethod]
+		public void EmployeeQueryWithOrgJoin()
+		{
+			var qry = new EmployeeEmptyWhere() { WithOrgs = true };
+			using (var cn = GetConnection())
+			{
+				var results = qry.Execute(cn);
+				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT [e].* FROM [dbo].[Employee] [e] INNER JOIN [dbo].[Organization] [org] ON [e].[OrganizationId]=[org].[Id]  ORDER BY [e].[LastName]"));				
+			}				
 		}
 
 		[TestMethod]
@@ -281,7 +292,7 @@ namespace Tests.SqlServer
 			using (var cn = GetConnection())
 			{
 				var results = qry.Execute(cn);
-				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT * FROM [dbo].[Employee] WHERE [LastName] LIKE @lastName ORDER BY [LastName]"));
+				Assert.IsTrue(qry.ResolvedSql.Equals("SELECT [e].* FROM [dbo].[Employee] [e]  WHERE [LastName] LIKE @lastName ORDER BY [e].[LastName]"));
 			}
 		}
 
