@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Postulate.Base;
 using Postulate.Base.Attributes;
 using System;
+using Tests.Queries;
 
 namespace Tests
 {
@@ -89,6 +90,51 @@ namespace Tests
 			var query = new ActiveEmployees();
 			string sql = QueryUtil.ResolveSql(query.Sql, query);
 			Assert.IsTrue(sql.Equals("SELECT * FROM [Employee] WHERE [IsActive]=@isActive  ORDER BY [Nothing]"));
+		}
+
+		[TestMethod]
+		public void PagingQueryWithoutPage()
+		{
+			var query = new PagingQuery();
+			string sql = QueryUtil.ResolveSql(query.Sql, query);
+			Assert.IsTrue(sql.Equals(@"SELECT
+				[dr].*,
+				ROW_NUMBER() OVER (ORDER BY [Date]) AS [RowNumber]
+			FROM
+				dbo.FnDateRange('4/1/19', '5/1/19') [dr]
+			ORDER BY
+				[Date]
+			"));
+		}
+
+		[TestMethod]
+		public void PagingQueryWithFirstPage()
+		{
+			var query = new PagingQuery() { Page = 0 };
+			string sql = QueryUtil.ResolveSql(query.Sql, query);
+			Assert.IsTrue(sql.Equals(@"SELECT
+				[dr].*,
+				ROW_NUMBER() OVER (ORDER BY [Date]) AS [RowNumber]
+			FROM
+				dbo.FnDateRange('4/1/19', '5/1/19') [dr]
+			ORDER BY
+				[Date]
+			OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY"));
+		}
+
+		[TestMethod]
+		public void PagingQueryWithAnyPage()
+		{
+			var query = new PagingQuery() { Page = 3 };
+			string sql = QueryUtil.ResolveSql(query.Sql, query);
+			Assert.IsTrue(sql.Equals(@"SELECT
+				[dr].*,
+				ROW_NUMBER() OVER (ORDER BY [Date]) AS [RowNumber]
+			FROM
+				dbo.FnDateRange('4/1/19', '5/1/19') [dr]
+			ORDER BY
+				[Date]
+			OFFSET 30 ROWS FETCH NEXT 10 ROWS ONLY"));
 		}
 	}
 }

@@ -84,11 +84,33 @@ namespace Postulate.Base
 				result = ResolveWhereToken(token, result, terms);
 			}			
 
+			if (sql.Contains(InternalStringExtensions.OffsetToken))
+			{
+				if (FindOffsetProperty(parameters, out PropertyInfo offsetProperty))
+				{
+					var offsetAttr = offsetProperty.GetCustomAttribute<OffsetAttribute>();
+					int page = (int)offsetProperty.GetValue(parameters);
+					result = result.Replace(InternalStringExtensions.OffsetToken, offsetAttr.GetOffsetFetchSyntax(page));
+				}
+			}
+
 			// remove any leftover tokens (i.e. {orderBy}, {join} etc)
 			var matches = Regex.Matches(result, "(?<!{)({[^{\r\n]*})(?!{)");
 			foreach (Match match in matches) result = result.Replace(match.Value, string.Empty);
 
 			return result;
+		}
+
+		private static bool FindOffsetProperty(object queryObject, out PropertyInfo offsetProperty)
+		{
+			offsetProperty = queryObject.GetType().GetProperties().FirstOrDefault(pi => pi.HasAttribute<OffsetAttribute>() && pi.PropertyType.Equals(typeof(int?)));
+			if (offsetProperty != null)
+			{
+				object value = offsetProperty.GetValue(queryObject);
+				return (value != null);
+			}
+
+			return false;
 		}
 
 		private static string ResolveJoins(string sql, object parameters)
